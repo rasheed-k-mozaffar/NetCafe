@@ -1,0 +1,210 @@
+﻿.logo-text > a {
+    color: black;
+}
+
+    .logo-text > a > span {
+        background-color: var(--main-color);
+        color: white;
+        padding: .25rem .75rem;
+        border-radius: 5px;
+        box-shadow: 3px 3px var(--secondary-color);
+        transition: .2s ease all;
+    }
+
+        .logo-text > a > span:hover {
+            box-shadow: 0px 0px;
+            background-color: var(--secondary-color);
+        }
+
+a {
+    text-decoration: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* END */
+
+/* Declaring global custom CSS properties */
+body {
+    font-family: 'Poppins', sans-serif;
+    font-size: .875rem;
+    color: #69699b;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.main_container {
+    width: 100%;
+    max-width: var(--main-width);
+    padding: .5rem 1rem;
+    margin: 0 auto;
+}
+
+/* Main navigation bar */
+
+.header_navigation {
+    position: fixed;
+    background-color: #FFFFFF;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.navigation_bar {
+    font-family: 'Poppins Medium', sans-serif;
+    padding: var(--main-side-padding);
+    height: 3.5rem;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.navigation_container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    z-index: 110;
+}
+
+.navigation_logo {
+    display: flex;
+}
+
+.navigation_menu {
+    display: flex;
+    align-items: center;
+}
+
+.navigation_list {
+    padding: 0;
+    order: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    column-gap: 1rem;
+}
+
+.navigation_item {
+    width: 100%;
+}
+
+.navigation_link {
+    display: flex;
+    cursor: pointer;
+    position: relative;
+    align-items: center;
+    white-space: nowrap;
+    padding: .75rem;
+    border-radius: 4px;
+    color: black;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+}
+
+    .navigation_link:hover {
+        background-color: #f6f6f6;
+    }
+
+.sign-in-btn {
+    cursor: pointer;
+    font-weight: 700;
+    transition: all .2s;
+    padding: 5px 15px;
+    border-radius: 100px;
+    background: transparent;
+    border: 2px solid var(--main-color);
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+}
+
+    .sign-in-btn:hover {
+        background: var(--main-color);
+    }
+
+    .sign-in-btn > svg {
+        width: 34px;
+        margin-left: 10px;
+        transition: transform .3s ease-in-out;
+    }
+
+    .sign-in-btn:hover svg {
+        transform: translateX(5px);
+    }
+
+    .sign-in-btn:active {
+        transform: scale(0.95);
+    }
+
+
+
+/* Custom toggle(checkbox) for the mobile version */
+
+[type="checkbox"]:checked,
+[type="checkbox"]:not(:checked) {
+    position: absolute;
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.navigation_extras {
+    display: flex;
+    align-items: center;
+    color: #69699b;
+    z-index: 110;
+    order: 1;
+}
+
+
+#navigation_toggle ~ .navigation_extras label .navigation_close,
+#navigation_toggle ~ .navigation_extras label .navigation_open {
+    display: none;
+}
+
+@media screen and (max-width: 900px) {
+
+    .navigation_extras {
+        column-gap: 1rem;
+    }
+
+    #navigation_toggle:checked ~ .navigation_extras label,
+    #navigation_toggle:not(:checked) ~ .navigation_extras label {
+        display: flex;
+        cursor: pointer;
+    }
+
+    .navigation_list {
+        position: fixed;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 250px;
+        height: 100%;
+        top: 0;
+        right: -100%;
+        padding: 4rem 0 1rem 0;
+        row-gap: 1rem;
+        transition: .3s;
+        background-color: #FFFFFF;
+        box-shadow: rgba(149, 149, 149, 0.15) 0 3px 10px;
+    }
+
+        .navigation_list .navigation_link {
+            padding: 0.60rem 1.5rem;
+            border-radius: unset;
+        }
+
+    #navigation_toggle:checked ~ .navigation_list {
+        right: 0;
+    }
+
+    #navigation_toggle:not(:checked) ~ .navigation_extras label .navigation_open,
+    #navigation_toggle:checked ~ .navigation_extras label .navigation_close {
+        display: flex;
+    }
+}
