@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCafe.Server", "NetCafe.Server.csproj", "{016DB285-6104-45DE-9F76-D41F6E7954C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{016DB285-6104-45DE-9F76-D41F6E7954C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{016DB285-6104-45DE-9F76-D41F6E7954C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{016DB285-6104-45DE-9F76-D41F6E7954C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{016DB285-6104-45DE-9F76-D41F6E7954C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A9D766DE-1C7B-44B3-9CA8-93974121C756}
+	EndGlobalSection
+EndGlobal
