@@ -396,3 +396,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+NetCafe/Server/appsettings.Development.json
