@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
@@ -29,7 +30,6 @@
   <ItemGroup>
     <Folder Include="Controllers/" />
     <Folder Include="Extensions/" />
-    <Folder Include="Repositories/" />
   </ItemGroup>
 
 </Project>

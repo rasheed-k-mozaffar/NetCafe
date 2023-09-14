@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCafe.Server", "NetCafe.Server.csproj", "{016DB285-6104-45DE-9F76-D41F6E7954C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCafe.Shared", "..\Shared\NetCafe.Shared.csproj", "{DC73E45D-D023-4573-B9EB-DD83FD567D79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{016DB285-6104-45DE-9F76-D41F6E7954C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{016DB285-6104-45DE-9F76-D41F6E7954C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{016DB285-6104-45DE-9F76-D41F6E7954C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC73E45D-D023-4573-B9EB-DD83FD567D79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC73E45D-D023-4573-B9EB-DD83FD567D79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC73E45D-D023-4573-B9EB-DD83FD567D79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC73E45D-D023-4573-B9EB-DD83FD567D79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
