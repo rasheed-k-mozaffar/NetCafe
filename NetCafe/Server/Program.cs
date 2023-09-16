@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.ResponseCompression;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Data.SqlClient;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,29 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = false;
 }).AddDefaultTokenProviders()
   .AddEntityFrameworkStores<ApplicationDbContext>();
+
+// this service provides access to the authenticated user's ID 
+
+builder.Services.AddScoped(sp =>
+{
+    var options = new UserIdentityOptions();
+
+    // this line gives us access to the context accessor interface
+    // so that we can retrieve the http context and access the current
+    // authenticated user
+    var httpContextAccessor = sp.GetService<IHttpContextAccessor>();
+
+    if (httpContextAccessor is not null)
+    {
+        var httpContext = httpContextAccessor.HttpContext;
+
+        if (httpContext is not null && httpContext.User.Identity!.IsAuthenticated)
+        {
+            options.UserId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+        }
+    }
+    return options;
+});
 
 var app = builder.Build();
 
