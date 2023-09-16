@@ -14,6 +14,7 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
 
         builder.HasOne(p => p.ParentComment)
                .WithMany(p => p.Replies)
-               .HasForeignKey(p => p.ParentCommentId);
+               .HasForeignKey(p => p.ParentCommentId)
+               .OnDelete(DeleteBehavior.Cascade); // delete replies when comment is deleted
     }
 }
