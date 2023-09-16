@@ -13,6 +13,10 @@ public class TagConfiguration : IEntityTypeConfiguration<Tag>
                .HasMaxLength(50)
                .HasColumnType("varchar");
 
+        builder.Property(p => p.Description)
+               .IsRequired()
+               .HasMaxLength(5000);
+
         builder.HasMany(p => p.Posts)
                .WithMany(p => p.Tags);
     }
