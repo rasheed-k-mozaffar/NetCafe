@@ -22,7 +22,7 @@ public class PostsRepository : IPostsRepository
         }
         else
         {
-            return false;
+            throw new DataInsertionFailedException(message: "Something went wrong while attempting to add the new post.");
         }
     }
 
