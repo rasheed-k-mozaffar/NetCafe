@@ -1,8 +1,23 @@
 ﻿using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+#region Serilog Config
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
+    .Build();
+
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(configuration)
+    .CreateLogger();
+#endregion
 #region ConnectionString Construction
 var connectionStringBuilder = new SqlConnectionStringBuilder();
 connectionStringBuilder.DataSource = "localhost";
@@ -11,15 +26,17 @@ connectionStringBuilder.UserID = builder.Configuration["AppSettings:UserId"];
 connectionStringBuilder.Password = builder.Configuration["AppSettings:UserPassword"];
 connectionStringBuilder.TrustServerCertificate = true;
 #endregion
+#region Serivces Registration
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-
+builder.Services.AddSerilog();
 // Register the Application DB Context to the DI Container for future uses.
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(connectionStringBuilder.ToString());
 });
-
+#endregion
+#region Identity Config
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
     // Configuring the acceptable passwords.
@@ -30,9 +47,29 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = false;
 }).AddDefaultTokenProviders()
   .AddEntityFrameworkStores<ApplicationDbContext>();
-
+#endregion
+#region Bearer Authentication Config
+// adding bearer authentication
+builder.Services.AddAuthentication(o =>
+{
+    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer("Bearer", options =>
+{
+    var key = Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"]!);
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateLifetime = true
+    };
+});
+#endregion
+#region User Identity Options
 // this service provides access to the authenticated user's ID 
-
 builder.Services.AddScoped(sp =>
 {
     var options = new UserIdentityOptions();
@@ -54,6 +91,8 @@ builder.Services.AddScoped(sp =>
     return options;
 });
 
+#endregion
+Log.Information("Starting the application at {timeOfStarting}", DateTime.Now.ToShortTimeString());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -67,6 +106,7 @@ else
     app.UseHsts();
 }
 
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
