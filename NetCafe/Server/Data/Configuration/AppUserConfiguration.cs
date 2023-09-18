@@ -8,13 +8,9 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
        {
               builder.HasKey(x => x.Id);
 
-              builder.Property(p => p.FirstName)
+              builder.Property(p => p.FullName)
                      .IsRequired()
-                     .HasMaxLength(75);
-
-              builder.Property(p => p.LastName)
-                     .IsRequired()
-                     .HasMaxLength(75);
+                     .HasMaxLength(150);
 
               builder.HasMany(p => p.Comments)
                      .WithOne(p => p.User)
