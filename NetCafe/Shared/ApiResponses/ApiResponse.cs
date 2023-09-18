@@ -1,4 +1,4 @@
-﻿namespace NetCafe.Shared;
+﻿namespace NetCafe.Shared.ApiResponses;
 
 public class ApiResponse
 {
