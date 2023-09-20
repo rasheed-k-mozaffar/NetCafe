@@ -5,25 +5,25 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' " />
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' "/>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'http' "/>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10"/>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.10"/>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.10"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.10" />
-    <PackageReference Include="Serilog.AspNetCore" Version="*" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="*" />
-    <PackageReference Include="Serilog.Sinks.File" Version="*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.10"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.10"/>
+    <PackageReference Include="Serilog.AspNetCore" Version="*"/>
+    <PackageReference Include="Serilog.Settings.Configuration" Version="*"/>
+    <PackageReference Include="Serilog.Sinks.File" Version="*"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Client\NetCafe.Client.csproj" />
-    <ProjectReference Include="..\Shared\NetCafe.Shared.csproj" />
+    <ProjectReference Include="..\Client\NetCafe.Client.csproj"/>
+    <ProjectReference Include="..\Shared\NetCafe.Shared.csproj"/>
   </ItemGroup>
 </Project>
