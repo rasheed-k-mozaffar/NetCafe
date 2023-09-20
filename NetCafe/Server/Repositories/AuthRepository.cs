@@ -39,6 +39,7 @@ public class AuthRepository : IAuthRepository
 
         AppUser userToRegister = new AppUser
         {
+            UserName = request.Email,
             FullName = request.FullName,
             Email = request.Email,
             ProfilePicture = request.ProfilePicture

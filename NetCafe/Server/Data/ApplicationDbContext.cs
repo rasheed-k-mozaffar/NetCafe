@@ -43,6 +43,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
           new AppUser
           {
               Id = configuration["Author:ID"]!,
+              UserName = configuration["Author:Email"],
               FullName = configuration["Author:FullName"],
               Email = configuration["Author:Email"],
               NormalizedEmail = configuration["Author:Email"]!.ToUpper(),
