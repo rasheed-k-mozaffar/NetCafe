@@ -12,5 +12,5 @@ public class PostDto
     public int Views { get; set; }
     public int Likes { get; set; }
     public ICollection<CommentDto>? Comments { get; set; }
-    public ICollection<TagDto>? Tags { get; set; }
+    public ICollection<TagSummaryDto>? Tags { get; set; }
 }
