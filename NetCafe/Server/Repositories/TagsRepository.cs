@@ -12,11 +12,16 @@ public class TagsRepository : ITagsRepository
 
     public async Task<bool> CreateTagAsync(Tag tag)
     {
-        var result = await context.Tags.AddAsync(tag);
-        await context.SaveChangesAsync();
+        bool alreadyExists = context.Tags.Any(t => t.Name == tag.Name);
+        if (alreadyExists)
+        {
+            throw new DataInsertionFailedException(message: $"A tag with the name {tag.Name} already exists in the system");
+        }
 
+        var result = await context.Tags.AddAsync(tag);
         if (result.State == EntityState.Added)
         {
+            await context.SaveChangesAsync();
             return true;
         }
         else
@@ -62,10 +67,10 @@ public class TagsRepository : ITagsRepository
         }
 
         var result = context.Tags.Remove(tag);
-        await context.SaveChangesAsync();
 
         if (result.State == EntityState.Deleted)
         {
+            await context.SaveChangesAsync();
             return true;
         }
         else

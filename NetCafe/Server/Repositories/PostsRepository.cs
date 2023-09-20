@@ -13,10 +13,9 @@ public class PostsRepository : IPostsRepository
     public async Task<bool> CreatePostAsync(Post post)
     {
         var result = await context.Posts.AddAsync(post);
-        await context.SaveChangesAsync();
-
         if (result.State == EntityState.Added)
         {
+            await context.SaveChangesAsync();
             // if the post is added successfully, return true
             return true;
         }
@@ -71,10 +70,9 @@ public class PostsRepository : IPostsRepository
         else
         {
             var result = context.Posts.Remove(postToDelete);
-            await context.SaveChangesAsync();
-
             if (result.State == EntityState.Deleted)
             {
+                await context.SaveChangesAsync();
                 // The post was deleted successfully.
                 return true;
             }

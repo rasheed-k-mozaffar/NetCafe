@@ -21,10 +21,10 @@ public class CommentsRepository : ICommentsRepository
         comment.PostId = postId;
         comment.AppUserId = identityOptions.UserId;
         var result = await context.Comments.AddAsync(comment);
-        await context.SaveChangesAsync();
 
         if (result.State == EntityState.Added)
         {
+            await context.SaveChangesAsync();
             return true;
         }
         else
@@ -49,10 +49,10 @@ public class CommentsRepository : ICommentsRepository
         reply.ParentCommentId = parentComment.Id;
 
         var result = await context.Comments.AddAsync(reply);
-        await context.SaveChangesAsync();
 
         if (result.State == EntityState.Added)
         {
+            await context.SaveChangesAsync();
             return true;
         }
         else
@@ -71,10 +71,10 @@ public class CommentsRepository : ICommentsRepository
         }
 
         var result = context.Comments.Remove(comment);
-        await context.SaveChangesAsync();
 
         if (result.State == EntityState.Deleted)
         {
+            await context.SaveChangesAsync();
             return true;
         }
         else
