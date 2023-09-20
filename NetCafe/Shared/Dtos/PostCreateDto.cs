@@ -16,5 +16,5 @@ public class PostCreateDto
     [MaxLength(150, ErrorMessage = "The content of the post should not exceed 15,000 characters")]
     public string? Content { get; set; }
     public Guid? SeriesId { get; set; }
-    public List<TagDto>? Tags { get; set; }
+    public List<Guid>? TagIds { get; set; }
 }
