@@ -6,7 +6,6 @@ namespace NetCafe.Server.Controllers;
 
 public class PostsController : BaseController
 {
-    private static string[] allowedImageExtensions = { ".jpg", ".jpeg", ".png" };
     private readonly IPostsRepository postsRepository;
     private readonly ILogger<PostsController> logger;
     public PostsController
@@ -79,31 +78,8 @@ public class PostsController : BaseController
     {
         if (ModelState.IsValid)
         {
-            byte[]? image = null;
-            // handle the image file extension, if the extension isn't allowed, refuse the creation
-            // of the post and return a bad request with a messsage telling the user to use a viable file extension
-            if (model.CoverImage is not null)
-            {
-                string imageExtension = Path.GetExtension(model.CoverImage.FileName);
-                // allowed image extension
-                if (allowedImageExtensions.Contains(imageExtension))
-                {
-                    // convert the image from a file, to a byte array to store in the db
-                    image = await Helpers.ConvertFileToByteArrayAsync(model.CoverImage);
-                }
-                else
-                {
-                    logger.LogError("Failed to publish {title} due to invalid cover image file extension", model.Title);
-                    // use of unallowed image extension
-                    return BadRequest(new ApiErrorResponse
-                    {
-                        Message = $"The file extension ({imageExtension}) is not allowed"
-                    });
-                }
-            }
             // map the incoming data
             var postToCreate = model.ToPostCreate();
-            postToCreate.CoverImage = image;
 
             // map the tags
             if (model.TagIds is not null && model.TagIds.Any())
@@ -190,25 +166,6 @@ public class PostsController : BaseController
     {
         if (ModelState.IsValid)
         {
-            byte[]? image = null;
-            if (model.CoverImage is not null)
-            {
-                string imageExtension = Path.GetExtension(model.CoverImage.FileName);
-                if (allowedImageExtensions.Contains(imageExtension))
-                {
-                    image = await Helpers.ConvertFileToByteArrayAsync(model.CoverImage);
-                }
-                else
-                {
-                    logger.LogError("Failed to edit {title} due to invalid cover image file extension", model.Title);
-                    // use of unallowed image extension
-                    return BadRequest(new ApiErrorResponse
-                    {
-                        Message = $"The file extension ({imageExtension}) is not allowed"
-                    });
-                }
-            }
-
             var postToUpdate = await context.Posts.FindAsync(id);
             if (postToUpdate is null)
             {
@@ -221,7 +178,6 @@ public class PostsController : BaseController
             }
 
             // update the post's properties with the new values
-            postToUpdate.CoverImage = image;
             postToUpdate.Title = model.Title;
             postToUpdate.Content = model.Content;
             postToUpdate.ModifiedOn = DateTime.UtcNow;
