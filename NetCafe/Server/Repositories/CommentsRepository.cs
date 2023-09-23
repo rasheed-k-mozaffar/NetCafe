@@ -69,9 +69,13 @@ public class CommentsRepository : ICommentsRepository
         {
             throw new NotFoundException(message: "No comment was found with the given ID.");
         }
+        // remove the replies to the comment as well
+        if (comment.Replies is not null && comment.Replies.Any())
+        {
+            context.Comments.RemoveRange(comment.Replies);
+        }
 
         var result = context.Comments.Remove(comment);
-
         if (result.State == EntityState.Deleted)
         {
             await context.SaveChangesAsync();
@@ -100,7 +104,7 @@ public class CommentsRepository : ICommentsRepository
     {
         // get the comments without tracking them by the context
         var comments = await context.Comments
-            .AsNoTracking().ToListAsync();
+            .AsNoTracking().Where(c => c.PostId == postId).ToListAsync();
 
         return comments;
     }
