@@ -1,11 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
-
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'https' ">
     <ExternalConsole>true</ExternalConsole>
   </PropertyGroup>
@@ -13,19 +11,18 @@
     <ExternalConsole>true</ExternalConsole>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.10" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Shared\NetCafe.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Shared\" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.10"/>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.10" PrivateAssets="all"/>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0"/>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.0-preview2-final"/>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Shared\" />
+    <ProjectReference Include="..\Shared\NetCafe.Shared.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Shared\"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Shared\"/>
   </ItemGroup>
 </Project>
