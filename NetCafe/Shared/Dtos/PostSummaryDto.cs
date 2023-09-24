@@ -7,5 +7,6 @@ public class PostSummaryDto
     public string? Title { get; set; }
     public int Likes { get; set; }
     public DateTime PublishedOn { get; set; }
+    public DateTime? ModifiedOn { get; set; }
     public List<TagSummaryDto>? Tags { get; set; }
 }

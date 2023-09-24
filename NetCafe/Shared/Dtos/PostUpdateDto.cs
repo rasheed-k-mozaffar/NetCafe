@@ -5,7 +5,7 @@ namespace NetCafe.Shared.Dtos;
 
 public class PostUpdateDto
 {
-    public IFormFile? CoverImage { get; set; }
+    public string? CoverImageUrl { get; set; }
 
     [Required(ErrorMessage = "The post's title is required")]
     [MaxLength(150, ErrorMessage = "The title should not be greater than 150 characters")]

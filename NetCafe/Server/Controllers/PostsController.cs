@@ -183,6 +183,7 @@ public class PostsController : BaseController
             postToUpdate.ModifiedOn = DateTime.UtcNow;
             postToUpdate.SeriesId = model.SeriesId;
             postToUpdate.Tags = model.Tags?.Select(t => t.ToTag()).ToList();
+            postToUpdate.CoverImageUrl = model.CoverImageUrl;
 
             await context.SaveChangesAsync();
             logger.LogInformation("Post with ID: {id} was successfully updated", id);

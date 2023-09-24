@@ -5,7 +5,6 @@ public class Post
     public Guid Id { get; set; }
     public Guid? SeriesId { get; set; }
     public virtual Series? Series { get; set; }
-    public virtual ICollection<Image>? Images { get; set; } = new List<Image>();
     public string? CoverImageUrl { get; set; }
     public string? Title { get; set; }
     public string? Content { get; set; }

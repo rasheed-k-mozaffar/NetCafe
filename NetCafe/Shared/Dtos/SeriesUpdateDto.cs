@@ -2,10 +2,9 @@
 
 namespace NetCafe.Shared.Dtos;
 
-public class SeriesCreateDto
+public class SeriesUpdateDto
 {
     public string? CoverImageUrl { get; set; }
-    public Guid SeriesId { get; set; }
     [Required(ErrorMessage = "The series name is required")]
     [MinLength(2, ErrorMessage = "Series' name must contain at least 2 letters")]
     [MaxLength(100, ErrorMessage = "Series' name should not be greater than 100 characters")]
