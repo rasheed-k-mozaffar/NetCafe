@@ -42,7 +42,7 @@ public class AuthRepository : IAuthRepository
             UserName = request.Email,
             FullName = request.FullName,
             Email = request.Email,
-            ProfilePicture = request.ProfilePicture
+            ProfilePictureUrl = request.ProfilePictureUrl
         };
 
         var registerationResult = await userManager.CreateAsync(userToRegister, request.Password!);
