@@ -10,11 +10,12 @@ public static class DataMapper
         return new PostSummaryDto
         {
             PostId = post.Id,
-            CoverImage = post.CoverImage,
+            CoverImageUrl = post.CoverImageUrl,
             Title = post.Title,
             PublishedOn = post.PublishedOn,
+            ModifiedOn = post.ModifiedOn,
             Likes = post.Likes,
-            Tags = post.Tags?.Select(t => t.ToTagDto()).ToList()
+            Tags = post.Tags?.Select(t => t.ToTagSummary()).ToList()
         };
     }
 
@@ -24,15 +25,16 @@ public static class DataMapper
         {
             PostId = post.Id,
             SeriesId = post.SeriesId,
-            Series = post.Series?.ToSeriesDto(),
-            CoverImage = post.CoverImage,
+            Series = post.Series?.ToSeriesSummary(),
+            CoverImageUrl = post.CoverImageUrl,
             Title = post.Title,
             Content = post.Content,
             Views = post.Views,
             Likes = post.Likes,
             PublishedOn = post.PublishedOn,
+            ModifiedOn = post.ModifiedOn,
             Comments = post.Comments?.Select(c => c.ToCommentDto()).ToList(),
-            Tags = post.Tags?.Select(t => t.ToTagDto()).ToList()
+            Tags = post.Tags?.Select(t => t.ToTagSummary()).ToList()
         };
     }
     #endregion
@@ -41,6 +43,16 @@ public static class DataMapper
     public static TagDto ToTagDto(this Tag tag)
     {
         return new TagDto
+        {
+            TagId = tag.Id,
+            Name = tag.Name,
+            Description = tag.Description
+        };
+    }
+
+    public static TagSummaryDto ToTagSummary(this Tag tag)
+    {
+        return new TagSummaryDto
         {
             TagId = tag.Id,
             Name = tag.Name
@@ -55,6 +67,7 @@ public static class DataMapper
         {
             CommentId = comment.Id,
             PostId = comment.PostId,
+            ParentCommentId = comment.ParentCommentId,
             AppUserId = comment.AppUserId,
             Content = comment.Content,
             PostedOn = comment.PostedOn,
@@ -65,6 +78,17 @@ public static class DataMapper
     #endregion
 
     #region Series Mappers
+    public static SeriesSummaryDto ToSeriesSummary(this Series series)
+    {
+        return new SeriesSummaryDto
+        {
+            SeriesId = series.Id,
+            Name = series.Name,
+            Description = series.Description,
+            PostsCount = series.Posts?.Count,
+            CoverImageUrl = series.CoverImageUrl,
+        };
+    }
     public static SeriesDto ToSeriesDto(this Series series)
     {
         return new SeriesDto
@@ -72,6 +96,7 @@ public static class DataMapper
             SeriesId = series.Id,
             Name = series.Name,
             Description = series.Description,
+            CoverImageUrl = series.CoverImageUrl,
             Posts = series.Posts?.Select(p => p.ToPostSummary()).ToList()
         };
     }
@@ -86,24 +111,12 @@ public static class ModelMapper
         return new Post
         {
             // cover image handled in the controller
+            Id = post.PostId,
             Title = post.Title,
             Content = post.Content,
             SeriesId = post.SeriesId,
-            Tags = post.Tags?.Select(t => t.ToTag()).ToList(),
-            PublishedOn = DateTime.UtcNow
-        };
-    }
-
-    public static Post ToPostUpdate(this PostUpdateDto post)
-    {
-        return new Post
-        {
-            // cover image handled in the controller
-            Title = post.Title,
-            Content = post.Content,
-            SeriesId = post.SeriesId,
-            Tags = post.Tags?.Select(t => t.ToTag()).ToList(),
-            ModifiedOn = DateTime.UtcNow
+            PublishedOn = DateTime.UtcNow,
+            CoverImageUrl = post.CoverImageUrl
         };
     }
     #endregion
@@ -114,7 +127,40 @@ public static class ModelMapper
         return new Tag
         {
             Id = tag.TagId,
-            Name = tag.Name
+            Name = tag.Name,
+            Description = tag.Description
+        };
+    }
+    public static Tag ToTagCreate(this TagCreateDto tag)
+    {
+        return new Tag
+        {
+            Name = tag.Name,
+            Description = tag.Description
+        };
+    }
+    #endregion
+
+    #region Comment Mappers
+    public static Comment ToCommentAdd(this CommentCreateDto comment)
+    {
+        return new Comment
+        {
+            Content = comment.Content,
+            PostedOn = DateTime.UtcNow
+        };
+    }
+    #endregion
+
+    #region Series Mappers
+    public static Series ToSeriesCreate(this SeriesCreateDto series)
+    {
+        return new Series
+        {
+            Id = series.SeriesId,
+            Name = series.Name,
+            Description = series.Description,
+            CoverImageUrl = series.CoverImageUrl
         };
     }
     #endregion

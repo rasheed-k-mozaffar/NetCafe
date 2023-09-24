@@ -71,6 +71,7 @@ namespace NetCafe.Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
@@ -204,9 +205,11 @@ namespace NetCafe.Server.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CoverImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Title = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", maxLength: 15000, nullable: false),
                     PublishedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Views = table.Column<int>(type: "int", nullable: false),
                     Likes = table.Column<int>(type: "int", nullable: false)
                 },
@@ -254,6 +257,31 @@ namespace NetCafe.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PostId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SeriesId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    URL = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Images_Posts_PostId",
+                        column: x => x.PostId,
+                        principalTable: "Posts",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Images_Series_SeriesId",
+                        column: x => x.SeriesId,
+                        principalTable: "Series",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PostTag",
                 columns: table => new
                 {
@@ -289,7 +317,7 @@ namespace NetCafe.Server.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "ProfilePicture", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "24F1714A-340C-4EF5-99CE-63725043315E", 0, "41db924b-1352-409d-a87e-ccae37609c29", "rasheedkmozaffar@hotmail.com", false, "Rasheed Mozaffar", false, null, "RASHEEDKMOZAFFAR@HOTMAIL.COM", null, "AQAAAAIAAYagAAAAEJUt1YyhOFHXJoNkZi0HhXqpJ0bMJpM53fLaYFQC1U1P1/56kofcJ31O7UOkN9z47g==", null, false, null, null, false, null });
+                values: new object[] { "24F1714A-340C-4EF5-99CE-63725043315E", 0, "94c2b1e2-8366-4434-80df-f61dc07d0d24", "rasheedkmozaffar@hotmail.com", false, "Rasheed Mozaffar", false, null, "RASHEEDKMOZAFFAR@HOTMAIL.COM", null, "AQAAAAIAAYagAAAAEF6OSOvIHd/kPQiqqXHSz0tccNhTP96A8kwp5IrT6DZLRhMC/3DXesOiGNUW81/IjQ==", null, false, null, null, false, "rasheedkmozaffar@hotmail.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -351,6 +379,18 @@ namespace NetCafe.Server.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Images_PostId",
+                table: "Images",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Images_SeriesId",
+                table: "Images",
+                column: "SeriesId",
+                unique: true,
+                filter: "[SeriesId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Posts_SeriesId",
                 table: "Posts",
                 column: "SeriesId");
@@ -381,6 +421,9 @@ namespace NetCafe.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "Images");
 
             migrationBuilder.DropTable(
                 name: "NewsLetterSubs");

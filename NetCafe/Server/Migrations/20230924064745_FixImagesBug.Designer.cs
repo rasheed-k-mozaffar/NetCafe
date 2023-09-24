@@ -12,8 +12,8 @@ using NetCafe.Server.Data;
 namespace NetCafe.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230923072304_AddImagesTable")]
-    partial class AddImagesTable
+    [Migration("20230924064745_FixImagesBug")]
+    partial class FixImagesBug
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -182,31 +182,6 @@ namespace NetCafe.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("NetCafe.Server.Image", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("PostId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("SeriesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("URL")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("NetCafe.Server.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -254,8 +229,8 @@ namespace NetCafe.Server.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<byte[]>("ProfilePicture")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -284,13 +259,13 @@ namespace NetCafe.Server.Migrations
                         {
                             Id = "24F1714A-340C-4EF5-99CE-63725043315E",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1927e25c-0af0-4624-8fdc-02cd7c4dd583",
+                            ConcurrencyStamp = "6bcc7762-80de-4c6f-bb8b-78252217e740",
                             Email = "rasheedkmozaffar@hotmail.com",
                             EmailConfirmed = false,
                             FullName = "Rasheed Mozaffar",
                             LockoutEnabled = false,
                             NormalizedEmail = "RASHEEDKMOZAFFAR@HOTMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELi9RDAgrqT7tSFOh6j0ufE+WtmUCRcaPaO9J0U0NpWYm8AODswf5oQxjgAtsqReOA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPlT8UXdNho8tEjPJZ7y6Ep0MpIq7CxkCxEYv9D7ibTQZVhRk93riLfoEUC6DCYXwQ==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "rasheedkmozaffar@hotmail.com"
@@ -359,7 +334,7 @@ namespace NetCafe.Server.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(15000)
+                        .HasMaxLength(30000)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CoverImageUrl")
@@ -379,7 +354,7 @@ namespace NetCafe.Server.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(150)
+                        .HasMaxLength(200)
                         .HasColumnType("varchar");
 
                     b.Property<int>("Views")
@@ -395,18 +370,14 @@ namespace NetCafe.Server.Migrations
             modelBuilder.Entity("NetCafe.Server.Models.Series", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CoverImageId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CoverImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid?>("ImageId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -414,8 +385,6 @@ namespace NetCafe.Server.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CoverImageId");
 
                     b.ToTable("Series");
                 });
@@ -507,13 +476,6 @@ namespace NetCafe.Server.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("NetCafe.Server.Image", b =>
-                {
-                    b.HasOne("NetCafe.Server.Models.Post", null)
-                        .WithMany("Images")
-                        .HasForeignKey("PostId");
-                });
-
             modelBuilder.Entity("NetCafe.Server.Models.Comment", b =>
                 {
                     b.HasOne("NetCafe.Server.Models.AppUser", "User")
@@ -547,15 +509,6 @@ namespace NetCafe.Server.Migrations
                     b.Navigation("Series");
                 });
 
-            modelBuilder.Entity("NetCafe.Server.Models.Series", b =>
-                {
-                    b.HasOne("NetCafe.Server.Image", "CoverImage")
-                        .WithMany()
-                        .HasForeignKey("CoverImageId");
-
-                    b.Navigation("CoverImage");
-                });
-
             modelBuilder.Entity("PostTag", b =>
                 {
                     b.HasOne("NetCafe.Server.Models.Post", null)
@@ -584,8 +537,6 @@ namespace NetCafe.Server.Migrations
             modelBuilder.Entity("NetCafe.Server.Models.Post", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("NetCafe.Server.Models.Series", b =>
