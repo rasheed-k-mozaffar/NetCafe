@@ -12,7 +12,7 @@ using NetCafe.Server.Data;
 namespace NetCafe.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230918105205_InitialCreate")]
+    [Migration("20230923123401_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -21,6 +21,9 @@ namespace NetCafe.Server.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -179,6 +182,35 @@ namespace NetCafe.Server.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("NetCafe.Server.Image", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SeriesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("SeriesId")
+                        .IsUnique()
+                        .HasFilter("[SeriesId] IS NOT NULL");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("NetCafe.Server.Models.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -256,15 +288,16 @@ namespace NetCafe.Server.Migrations
                         {
                             Id = "24F1714A-340C-4EF5-99CE-63725043315E",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "41db924b-1352-409d-a87e-ccae37609c29",
+                            ConcurrencyStamp = "94c2b1e2-8366-4434-80df-f61dc07d0d24",
                             Email = "rasheedkmozaffar@hotmail.com",
                             EmailConfirmed = false,
                             FullName = "Rasheed Mozaffar",
                             LockoutEnabled = false,
                             NormalizedEmail = "RASHEEDKMOZAFFAR@HOTMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJUt1YyhOFHXJoNkZi0HhXqpJ0bMJpM53fLaYFQC1U1P1/56kofcJ31O7UOkN9z47g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEF6OSOvIHd/kPQiqqXHSz0tccNhTP96A8kwp5IrT6DZLRhMC/3DXesOiGNUW81/IjQ==",
                             PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false
+                            TwoFactorEnabled = false,
+                            UserName = "rasheedkmozaffar@hotmail.com"
                         });
                 });
 
@@ -333,8 +366,14 @@ namespace NetCafe.Server.Migrations
                         .HasMaxLength(15000)
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CoverImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Likes")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("PublishedOn")
                         .HasColumnType("datetime2");
@@ -360,12 +399,14 @@ namespace NetCafe.Server.Migrations
             modelBuilder.Entity("NetCafe.Server.Models.Series", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid?>("ImageId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -464,6 +505,22 @@ namespace NetCafe.Server.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("NetCafe.Server.Image", b =>
+                {
+                    b.HasOne("NetCafe.Server.Models.Post", "Post")
+                        .WithMany("Images")
+                        .HasForeignKey("PostId");
+
+                    b.HasOne("NetCafe.Server.Models.Series", "Series")
+                        .WithOne("Image")
+                        .HasForeignKey("NetCafe.Server.Image", "SeriesId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Series");
+                });
+
             modelBuilder.Entity("NetCafe.Server.Models.Comment", b =>
                 {
                     b.HasOne("NetCafe.Server.Models.AppUser", "User")
@@ -525,10 +582,14 @@ namespace NetCafe.Server.Migrations
             modelBuilder.Entity("NetCafe.Server.Models.Post", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("NetCafe.Server.Models.Series", b =>
                 {
+                    b.Navigation("Image");
+
                     b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618

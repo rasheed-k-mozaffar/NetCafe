@@ -12,7 +12,6 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     public DbSet<Tag> Tags { get; set; }
     public DbSet<Series> Series { get; set; }
     public DbSet<NewsLetterSub> NewsLetterSubs { get; set; }
-    public DbSet<Image> Images { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration) : base(options)
     {

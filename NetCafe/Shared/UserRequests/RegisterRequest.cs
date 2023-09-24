@@ -12,7 +12,7 @@ public class RegisterRequest
     [RegularExpression(@"^[^\s@]+@[^\s@]+\.[^\s@]+$")]
     public string? Email { get; set; }
 
-    public byte[]? ProfilePicture { get; set; }
+    public string? ProfilePictureUrl { get; set; }
 
     [Required(ErrorMessage = "Your password is required")]
     [MinLength(6, ErrorMessage = "The password must be at least 6 characters long")]
