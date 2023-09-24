@@ -10,12 +10,12 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
 
         builder.Property(p => p.Title)
             .IsRequired()
-            .HasMaxLength(150)
+            .HasMaxLength(200)
             .HasColumnType("varchar");
 
         builder.Property(p => p.Content)
             .IsRequired()
-            .HasMaxLength(15_000);
+            .HasMaxLength(40_000);
 
         builder.HasMany(p => p.Comments)
                 .WithOne(p => p.Post)
