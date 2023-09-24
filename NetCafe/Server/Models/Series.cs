@@ -4,7 +4,6 @@ namespace NetCafe.Server.Models;
 
 public class Series
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public Guid Id { get; set; }
     public string? CoverImageUrl { get; set; }
     public string? Name { get; set; }

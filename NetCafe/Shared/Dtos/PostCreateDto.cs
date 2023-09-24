@@ -6,7 +6,6 @@ namespace NetCafe.Shared;
 
 public class PostCreateDto
 {
-    public Guid PostId { get; set; }
     [Required(ErrorMessage = "The post's title is required")]
     [MaxLength(150, ErrorMessage = "The title should not be greater than 150 characters")]
     public string? Title { get; set; }

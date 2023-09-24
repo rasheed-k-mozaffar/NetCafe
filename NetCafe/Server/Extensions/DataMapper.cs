@@ -111,7 +111,6 @@ public static class ModelMapper
         return new Post
         {
             // cover image handled in the controller
-            Id = post.PostId,
             Title = post.Title,
             Content = post.Content,
             SeriesId = post.SeriesId,
@@ -157,7 +156,6 @@ public static class ModelMapper
     {
         return new Series
         {
-            Id = series.SeriesId,
             Name = series.Name,
             Description = series.Description,
             CoverImageUrl = series.CoverImageUrl
