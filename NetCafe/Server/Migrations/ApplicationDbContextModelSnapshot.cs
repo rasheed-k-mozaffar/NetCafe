@@ -256,13 +256,13 @@ namespace NetCafe.Server.Migrations
                         {
                             Id = "24F1714A-340C-4EF5-99CE-63725043315E",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6bcc7762-80de-4c6f-bb8b-78252217e740",
+                            ConcurrencyStamp = "b649553b-1dc6-4808-81f2-9b5bb16118c3",
                             Email = "rasheedkmozaffar@hotmail.com",
                             EmailConfirmed = false,
                             FullName = "Rasheed Mozaffar",
                             LockoutEnabled = false,
                             NormalizedEmail = "RASHEEDKMOZAFFAR@HOTMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPlT8UXdNho8tEjPJZ7y6Ep0MpIq7CxkCxEYv9D7ibTQZVhRk93riLfoEUC6DCYXwQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIC6UXs8fG/X2MBRpKD6YsKSZi0h3q0uF3RxmMtOh2g+CSOueOge5gf8L/KaGoEccA==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "rasheedkmozaffar@hotmail.com"
@@ -331,7 +331,7 @@ namespace NetCafe.Server.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(30000)
+                        .HasMaxLength(40000)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CoverImageUrl")
@@ -367,6 +367,7 @@ namespace NetCafe.Server.Migrations
             modelBuilder.Entity("NetCafe.Server.Models.Series", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CoverImageUrl")
