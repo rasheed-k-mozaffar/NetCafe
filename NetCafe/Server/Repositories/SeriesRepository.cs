@@ -67,9 +67,7 @@ public class SeriesRepository : ISeriesRepository
     public async Task<ICollection<Series>> GetSeriesAsync()
     {
         // get all series (plural)
-        var series = await context.Series
-        .AsNoTracking().ToListAsync();
-
+        var series = await context.Series.ToListAsync();
         return series;
     }
 
