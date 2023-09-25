@@ -1,10 +1,41 @@
 ﻿@inherits LayoutComponentBase
-
-<div>
-    <NavBar />
+@inject ILocalStorageService LocalStorage
+<div class="@(isInDarkMode ? "dark" : null)">
+    <NavBar>
+        <Toggler>
+            <DarkModeToggle OnThemeChanged="HandleThemeChange" />
+        </Toggler>
+    </NavBar>
 </div>
 
-<main>
+<main class="@(isInDarkMode ? "dark" : null)">
     @Body
 </main>
 
+@code {
+    private bool isInDarkMode = false;
+    protected override async Task OnInitializedAsync()
+    {
+        if (!(await LocalStorage.ContainKeyAsync("theme")))
+        {
+            // the app is opened for the first time on the browser therefore create the theme key
+            await LocalStorage.SetItemAsStringAsync("theme", "light");
+        }
+
+        string theme = await LocalStorage.GetItemAsStringAsync("theme");
+
+        if (theme is "dark")
+        {
+            isInDarkMode = true;
+        }
+        else
+        {
+            isInDarkMode = false;
+        }
+    }
+
+    private void HandleThemeChange()
+    {
+        isInDarkMode = !isInDarkMode;
+    }
+}
