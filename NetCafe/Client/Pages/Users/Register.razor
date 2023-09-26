@@ -1,0 +1,50 @@
+﻿@page "/user/register"
+<div class="flex justify-center items-center min-h-screen">
+    <div class="p-6 rounded-lg shadow-lg ring-1 ring-slate-900/5 w-4/12">
+        <h1 class="font-light text-4xl mb-8">Create new account</h1>
+
+        <EditForm Model="model" OnValidSubmit="RegisterUserAsync">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <InputText @bind-Value="model.FullName" Placeholder="Example: John Doe" class="text-input" />
+                <ValidationMessage For="() => model.FullName" class="validation-msg" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <InputText type="text" @bind-Value="model.Email" Placeholder="Example: johndoe@mail.com"
+                    class="text-input" />
+                <ValidationMessage For="() => model.Email" class="validation-msg" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <InputText type="password" @bind-Value="model.Password" placeholder="Create your password"
+                    class="text-input" />
+                <ValidationMessage For="() => model.Password" class="validation-msg" />
+            </div>
+
+            <div class="form-group flex flex-start">
+                <input class="check-box mr-2" type="checkbox" @bind-value="model.SubscribeToNewsletter" />
+                <label class="form-label text-gray-500">Do you want to subscribe to my mailing list?</label>
+            </div>
+
+            <div class="form-group">
+                <button class="w-full py-2 rounded-md bg-blue-600 text-white text-sm hover:bg-blue-700">
+                    Sign up
+                </button>
+            </div>
+
+            <div class="mt-3">
+                <hr />
+            </div>
+
+            <div class="form-group mt-3 text-center">
+                <p class="text-sm font-light">If you already have an account? <a href="/user/sign-in"
+                        class="text-blue-500 decoration-blue-600 decoration-1">Sign in here</a>
+                </p>
+            </div>
+        </EditForm>
+    </div>
+</div>
