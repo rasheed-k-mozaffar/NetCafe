@@ -8,8 +8,9 @@ public class RegisterRequest
     [Required(ErrorMessage = "Your name is required")]
     public string? FullName { get; set; }
 
+    [Required(ErrorMessage = "Your email is required")]
     [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
-    [RegularExpression(@"^[^\s@]+@[^\s@]+\.[^\s@]+$")]
+    [RegularExpression(@"^[^\s@]+@[^\s@]+\.[^\s@]+$", ErrorMessage = "The email you entered is invalid")]
     public string? Email { get; set; }
 
     public string? ProfilePictureUrl { get; set; }
