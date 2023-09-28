@@ -3,9 +3,13 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using NetCafe.Client;
 
+
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
+builder.Services.AddAuthorizationCore();
+// register the custom-made services here
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // register the Authorization message handler as a transient service.
 builder.Services.AddTransient<AuthorizationMessageHandler>();
@@ -22,6 +26,5 @@ builder.Services.AddHttpClient("NetCafe.ServerAPI", client =>
 
 // Supply HttpClient instances that include access tokens when making requests to the server project.
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("NetCafe.ServerAPI"));
-
 await builder.Build().RunAsync();
 
