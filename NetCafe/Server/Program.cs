@@ -43,6 +43,7 @@ builder.Services.AddScoped<IPostsRepository, PostsRepository>();
 builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 builder.Services.AddScoped<ITagsRepository, TagsRepository>();
 builder.Services.AddScoped<ISeriesRepository, SeriesRepository>();
+builder.Services.AddScoped<IMailingListRepository, MailingListRepository>();
 #endregion
 #region Identity Config
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
