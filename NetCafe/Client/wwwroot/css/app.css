@@ -2,6 +2,16 @@
     outline: none;
 }
 
+input:focus {
+    outline: none;
+}
+
+input[type="checkbox"]:focus {
+    color: transparent;
+    background-color: transparent;
+    outline: none;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
