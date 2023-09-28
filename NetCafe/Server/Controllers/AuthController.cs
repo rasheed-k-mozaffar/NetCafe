@@ -85,7 +85,7 @@ public class AuthController : BaseController
             else
             {
                 logger.LogInformation("Failed registration for {userName}", request.Email);
-                return Ok(new ApiErrorResponse
+                return BadRequest(new ApiErrorResponse
                 {
                     Message = result.Message
                 });

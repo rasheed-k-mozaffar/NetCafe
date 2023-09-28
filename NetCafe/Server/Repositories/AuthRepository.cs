@@ -143,7 +143,6 @@ public class AuthRepository : IAuthRepository
             new Claim(ClaimTypes.NameIdentifier, owner.Id),
             new Claim(ClaimTypes.Email, owner.Email!),
             new Claim(ClaimTypes.Name, owner.FullName!),
-            new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
             new Claim(JwtRegisteredClaimNames.Exp, DateTime.UtcNow.AddDays(30).ToString()),
             new Claim(JwtRegisteredClaimNames.Iss, configuration["JwtSettings:Iss"]!),
             new Claim(JwtRegisteredClaimNames.Aud, configuration["JwtSettings:Aud"]!),
@@ -164,7 +163,7 @@ public class AuthRepository : IAuthRepository
         (
             issuer: configuration["JwtSettings:Iss"],
             audience: configuration["JwtSettings:Aud"],
-            signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256),
+            signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature),
             expires: DateTime.UtcNow.AddDays(30),
             claims: claims
         );
