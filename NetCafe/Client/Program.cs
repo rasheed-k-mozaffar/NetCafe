@@ -8,8 +8,14 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddAuthorizationCore();
+
 // register the custom-made services here
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IFilesService, FilesService>();
+builder.Services.AddScoped<ICommentsService, CommentsService>();
+builder.Services.AddScoped<IPostsService, PostsService>();
+builder.Services.AddScoped<ITagsService, TagsService>();
+builder.Services.AddScoped<IMailingListService, MailingListService>();
 
 // register the Authorization message handler as a transient service.
 builder.Services.AddTransient<AuthorizationMessageHandler>();
