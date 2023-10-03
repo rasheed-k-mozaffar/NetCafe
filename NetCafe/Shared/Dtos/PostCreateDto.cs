@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using NetCafe.Shared.Dtos;
 
-namespace NetCafe.Shared;
+namespace NetCafe.Shared.Dtos;
 
 public class PostCreateDto
 {
@@ -11,7 +11,7 @@ public class PostCreateDto
     public string? Title { get; set; }
 
     [Required(ErrorMessage = "The post's content is required")]
-    [MaxLength(150, ErrorMessage = "The content of the post should not exceed 15,000 characters")]
+    [MaxLength(30_000, ErrorMessage = "The content of the post should not exceed 15,000 characters")]
     public string? Content { get; set; }
     public string? CoverImageUrl { get; set; }
     public Guid? SeriesId { get; set; }

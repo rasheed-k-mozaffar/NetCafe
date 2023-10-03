@@ -28,10 +28,9 @@ public class PostsController : BaseController
         if (posts is null || !posts.Any())
         {
             logger.LogInformation("No posts were found in the database to retrieve");
-            return Ok(new ApiResponse
+            return BadRequest(new ApiErrorResponse
             {
-                Message = "There are currently no posts to view",
-                IsSuccess = true
+                Message = "There are currently no posts avaialble on the blog"
             });
         }
 

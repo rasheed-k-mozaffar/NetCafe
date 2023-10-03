@@ -55,10 +55,7 @@ public class AuthController : BaseController
             // entered data doesn't comply with the restrictions
             return BadRequest(new ApiErrorResponse
             {
-                Message = "The credentials you entered are invalid.",
-                Errors = ModelState.Values.SelectMany(v => v.Errors)
-                                            .Select(e => e.ErrorMessage)
-                                            .ToList()
+                Message = "The credentials you entered are invalid."
             });
         }
     }
@@ -96,10 +93,7 @@ public class AuthController : BaseController
             logger.LogError("Failed registration due to invalid data format");
             return BadRequest(new ApiErrorResponse
             {
-                Message = "The credentials you entered are invalid.",
-                Errors = ModelState.Values.SelectMany(v => v.Errors)
-                                            .Select(e => e.ErrorMessage)
-                                            .ToList()
+                Message = "The credentials you entered are invalid."
             });
         }
     }
