@@ -1,0 +1,26 @@
+<section class="p-5 rounded-lg">
+    @if (isLoadingPosts)
+    {
+        <div class="h-[25vh] flex items-center justify-center">
+            <Spinner />
+        </div>
+    }
+    else
+    {
+        <h1 class="text-5xl font-extrabold text-center blue-gradient">All Posts</h1>
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <NoResults />
+        }
+        <main class="flex flex-wrap 2xl:justify-start xl:justify-start lg:justify-start md:justify-start sm:justify-center px-4">
+        @if (posts is not null && posts.Any())
+            {
+                @foreach (var p in posts)
+                {
+                    <PostSummaryCard Post="p" />
+                }
+            }
+        </main>
+    }
+
+</section>
