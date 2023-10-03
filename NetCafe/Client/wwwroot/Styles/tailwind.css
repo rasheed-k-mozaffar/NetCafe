@@ -4,7 +4,7 @@
 
 @layer components {
     .nav-link {
-        @apply font-medium text-sm ring-1 ring-slate-900/5 dark:ring-slate-700 text-slate-500 hover:bg-slate-900/5 px-3 py-2 transition-colors rounded-md cursor-pointer dark:text-gray-50 dark:hover:bg-slate-700;
+        @apply font-medium text-sm ring-1 ring-slate-900/5 dark:ring-sky-400 text-slate-500 hover:bg-slate-900/5 px-4 py-2 transition-colors rounded-md cursor-pointer dark:text-gray-50 dark:hover:bg-slate-700;
     }
 
     .slaty {
@@ -33,5 +33,37 @@
 
     .validation-msg {
         @apply text-red-600 text-sm font-light mt-1
+    }
+
+    .blue-gradient {
+        @apply bg-gradient-to-r from-blue-600 to-blue-900 bg-clip-text text-transparent
+    }
+
+    h1 {
+        @apply text-4xl font-bold
+    }
+
+    h2 {
+        @apply text-3xl font-bold
+    }
+
+    h3 {
+        @apply text-2xl font-bold
+    }
+
+    h4 {
+        @apply text-xl font-bold
+    }
+
+    h5 {
+        @apply text-lg font-bold
+    }
+
+    ul {
+        @apply list-disc
+    }
+
+    ol {
+        @apply list-decimal
     }
 }
