@@ -1,16 +1,22 @@
 ﻿@inherits LayoutComponentBase
 @inject ILocalStorageService LocalStorage
-<div class="@(isInDarkMode ? "dark" : null)">
-    <NavBar>
-        <Toggler>
-            <DarkModeToggle OnThemeChanged="HandleThemeChange" />
-        </Toggler>
-    </NavBar>
-</div>
 
-<main class="@(isInDarkMode ? "dark" : null)">
-    @Body
-</main>
+<div class="@(isInDarkMode ? "dark" : null)">
+
+    <body class="min-h-screen bg-white dark:bg-jet-black pattern-vertical-lines">
+        <header>
+            <NavBar>
+                <Toggler>
+                    <DarkModeToggle OnThemeChanged="HandleThemeChange" />
+                </Toggler>
+            </NavBar>
+        </header>
+
+        <main>
+            @Body
+        </main>
+    </body>
+</div>
 
 @code {
     private bool isInDarkMode = false;
