@@ -1,4 +1,4 @@
-﻿<div class="w-full bg-red-100 rounded-md p-4 flex space-x-2 mb-3">
+﻿<div class="w-full bg-red-100 rounded-md p-4 flex space-x-2 mb-3" @attributes="@UserAttributes">
     <div>
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
             class="bi bi-exclamation-circle text-red-700" viewBox="0 0 16 16">
@@ -17,4 +17,5 @@
 
 @code {
     [Parameter] public string? ErrorMessage { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? UserAttributes { get; set; }
 }

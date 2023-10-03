@@ -1,0 +1,17 @@
+<EditForm Model="@request" OnValidSubmit="HandleRequestSubmission">
+    <p class="my-5 text-gray-700 dark:text-gray-100 ">If you want to hear from me, you can sign up for
+        mailing list below!</p>
+    <div class="flex space-x-2">
+        <input class="text-input w-96" placeholder="type your email" />
+        <button type="submit" class="px-4 py-2 rounded-md bg-blue-600 text-white text-sm">Join</button>
+    </div>
+</EditForm>
+
+@code {
+    private MailingListSubRequest request = new();
+
+    private async Task HandleRequestSubmission()
+    {
+
+    }
+}
