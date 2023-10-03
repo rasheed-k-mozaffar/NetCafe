@@ -2,7 +2,7 @@
 
 public interface ICommentsService
 {
-    Task<ApiResponse<ICollection<CommentDto>>> GetCommentsForPostAsync(Guid postId);
+    Task<ApiResponse<IEnumerable<CommentDto>>> GetCommentsForPostAsync(Guid postId);
     Task<ApiResponse<CommentDto>> GetCommentByIdAsync(Guid commentId);
     Task<ApiResponse> AddCommentAsync(Guid postId, CommentCreateDto comment);
     Task<ApiResponse> AddReplyToCommentAsync(Guid commentId, CommentCreateDto reply);
