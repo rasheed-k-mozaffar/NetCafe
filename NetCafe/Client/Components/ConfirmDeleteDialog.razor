@@ -1,0 +1,65 @@
+﻿@*OVERLAY*@
+<div class="fixed w-full h-full z-50 top-0 right-0 bg-gray-700/50 flex justify-center items-center">
+    @*DIALOG CONTENT*@
+    <div
+        class="w-[500px] lg:w-[500px] md:w-[500px] sm:w-[325px] px-4 py-5 bg-white ring-1 ring-slate-900/5 dark:ring-gray-600 rounded-lg dark:bg-slate-800 space-y-4">
+        @*HEADER*@
+        <div class="flex justify-between items-center ">
+            <div>
+                <h1 class="text-3xl font-bold dark:text-white">@Title</h1>
+            </div>
+            <div>
+                <button @onclick="CancelClicked" type="button"
+                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+        </div>
+        @*BODY*@
+        <div class="flex flex-col justify-center items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" fill="currentColor"
+                class="bi bi-exclamation-triangle-fill text-gray-400 dark:text-slate-600" viewBox="0 0 16 16">
+                <path
+                    d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+            </svg>
+
+            <p class="text-gray-500 dark:text-white text-md">@Text</p>
+        </div>
+        @*BUTTONS*@
+        <div class="text-center">
+            <button @onclick="ConfirmClicked" type="button"
+                class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
+                Yes, I'm sure
+            </button>
+            <button @onclick="CancelClicked" type="button"
+                class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No,
+                cancel</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    private bool isToggled = false;
+    [Parameter] public string? Title { get; set; }
+    [Parameter] public string? Text { get; set; }
+    [Parameter] public Guid ResourceId { get; set; } // this is the ID of the resource to delete
+    [Parameter] public EventCallback OnConfirmClicked { get; set; }
+    [Parameter] public EventCallback OnCancelClicked { get; set; }
+
+    private void ConfirmClicked()
+    {
+        OnConfirmClicked.InvokeAsync();
+        isToggled = false;
+    }
+
+    private void CancelClicked()
+    {
+        isToggled = false;
+        OnCancelClicked.InvokeAsync();
+    }
+}
