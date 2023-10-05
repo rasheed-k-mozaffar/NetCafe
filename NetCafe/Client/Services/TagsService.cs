@@ -68,6 +68,20 @@ public class TagsService : ITagsService
         return result!;
     }
 
+    public async Task<ApiResponse<TagDataDto>> GetTagDataByIdAsync(Guid tagId)
+    {
+        var response = await httpClient.GetAsync($"/api/tags/data/{tagId}");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
+            throw new DataRetrievalFailedException(message: error!.Message!);
+        }
+
+        var result = await response.Content.ReadFromJsonAsync<ApiResponse<TagDataDto>>();
+        return result!;
+    }
+
     public async Task<ApiResponse> UpdateTagAsync(Guid tagId, TagUpdateDto tag)
     {
         var response = await httpClient.PutAsJsonAsync($"/api/tags/{tagId}", tag);

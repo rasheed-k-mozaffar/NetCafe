@@ -58,6 +58,17 @@ public static class DataMapper
             Name = tag.Name
         };
     }
+
+    public static TagDataDto ToTagData(this Tag tag)
+    {
+        return new TagDataDto
+        {
+            TagId = tag.Id,
+            Name = tag.Name,
+            Description = tag.Description,
+            Posts = tag.Posts?.Select(p => p.ToPostSummary()).ToList()
+        };
+    }
     #endregion
 
     #region Comment Mappers

@@ -35,6 +35,33 @@ public class TagsController : BaseController
         });
     }
 
+    [HttpGet("data/{id}")]
+    public async Task<IActionResult> GetTagData(Guid id)
+    {
+        try
+        {
+            var tag = await tagsRepository.GetTagAsync(id);
+            var tagDataAsDto = tag.ToTagData();
+
+            logger.LogInformation("{tagName} with ID: {id} was successfully retrieved", tag.Name, id);
+            return Ok(new ApiResponse<TagDataDto>
+            {
+                Message = $"{tag.Name} tag was retrieved successfully",
+                Value = tagDataAsDto,
+                IsSuccess = true
+            });
+        }
+        catch (NotFoundException ex)
+        {
+            // not found tag
+            logger.LogError("No tag was found with the ID: {id}", id);
+            return BadRequest(new ApiErrorResponse
+            {
+                Message = ex.Message
+            });
+        }
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTag(Guid id)
     {
@@ -54,7 +81,7 @@ public class TagsController : BaseController
         catch (NotFoundException ex)
         {
             // not found tag
-            logger.LogError("No tag was found the ID: {id}", id);
+            logger.LogError("No tag was found with the ID: {id}", id);
             return BadRequest(new ApiErrorResponse
             {
                 Message = ex.Message
