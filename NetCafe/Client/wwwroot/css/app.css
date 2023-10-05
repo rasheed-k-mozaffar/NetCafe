@@ -12,6 +12,10 @@ input[type="checkbox"]:focus {
     outline: none;
 }
 
+textarea:focus {
+    outline: none;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;
