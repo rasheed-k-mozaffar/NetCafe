@@ -1,0 +1,21 @@
+﻿<div class="w-full bg-lime-100 rounded-md p-4 flex space-x-2 mb-3" @attributes="@UserAttributes">
+    <div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+            class="bi bi-exclamation-circle text-green-700" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+            <path
+                d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
+        </svg>
+    </div>
+
+    <div>
+        <p class="text-green-600 text-sm">
+            @SuccessMessage
+        </p>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string? SuccessMessage { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object>? UserAttributes { get; set; }
+}
