@@ -1,0 +1,41 @@
+@page "/author/tags/new"
+
+<section class="section-container">
+    <div class="container-middle-section space-y-8">
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="my-5">
+                <ErrorAlert ErrorMessage="@errorMessage" />
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="my-5">
+                <SuccessAlert SuccessMessage="@successMessage" />
+            </div>
+        }
+
+        <TitleBar Title="Create New Tag" WhereTo="/author/dashboard" Styles="my-5" />
+
+        <EditForm Model="tag" OnValidSubmit="HandleTagCreationAsync">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <InputText class="title-input" @bind-Value="@tag.Name" placeholder="Tag name" />
+                <ValidationMessage For="(() => tag.Name)" class="validation-msg" />
+            </div>
+
+            <div class="form-group">
+                <InputTextArea rows="6" class="text-area-input appearance-none" @bind-Value="@tag.Description"
+                    placeholder="Tag description" />
+                <ValidationMessage For="(() => tag.Description)" class="validation-msg" />
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="submit-btn" disabled="@isMakingRequest">Create Tag</button>
+            </div>
+        </EditForm>
+    </div>
+</section>

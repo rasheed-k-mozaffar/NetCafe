@@ -1,0 +1,59 @@
+﻿@page "/author/tags/manage"
+@if (wantsToDeleteTag)
+{
+    <ConfirmDeleteDialog Title="Delete Tag" Text="Do you really want to delete this tag?" ResourceId="tagToDeleteId"
+    OnConfirmClicked="DeleteTagAsync" OnCancelClicked="CloseDialog" />
+}
+<section class="section-container">
+    <div class="container-middle-section">
+        <TitleBar Title="Manage All Tags" WhereTo="/author/dashboard" Styles="my-12" />
+        @* The data is still loading *@
+        @if (isLoadingData)
+        {
+            <div class="my-12">
+                <Spinner />
+            </div>
+        }
+        else
+        {
+            @* The data is loaded *@
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Tag Name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Action
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Danger
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in tags)
+                        {
+                            <tr class="table-row">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    @t.Name
+                                </th>
+                                <td class="px-6 py-4 space-x-4">
+                                    <a href="/author/tags/edit" class="action-link">Edit</a>
+                                    <a href="/author/tags/edit" class="action-link">View</a>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button @onclick='(() => OpenDeleteDialog(t.TagId))'
+                                        class="text-red-500 text-medium hover:underline">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</section>
