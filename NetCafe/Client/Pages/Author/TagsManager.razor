@@ -4,6 +4,41 @@
     <ConfirmDeleteDialog Title="Delete Tag" Text="Do you really want to delete this tag?" ResourceId="tagToDeleteId"
     OnConfirmClicked="DeleteTagAsync" OnCancelClicked="CloseDialog" />
 }
+
+@if (wantsToUpdateTag)
+{
+    <ActionDialog Title="Update Tag" ResourceId="tagToUpdateId" OnCancelClicked="CloseActionDialog">
+    <Content>
+        @if (isRetrievingTagDetails)
+            {
+                <div>
+                    <Spinner />
+                </div>
+            }
+            else
+            {
+                <EditForm Model="updatedTag" OnValidSubmit="UpdateTagAsync">
+                    <DataAnnotationsValidator />
+
+                    <div class="form-group">
+                        <InputText class="title-input" @bind-Value="@updatedTag!.Name" placeholder="Tag name" />
+                        <ValidationMessage For="(() => updatedTag.Name)" class="validation-msg" />
+                    </div>
+
+                    <div class="form-group">
+                        <InputTextArea rows="6" class="text-area-input appearance-none" @bind-Value="@updatedTag.Description"
+                            placeholder="Tag description" />
+                        <ValidationMessage For="(() => updatedTag.Description)" class="validation-msg" />
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="submit-btn" disabled="@makingUpdateRequest">Update Tag</button>
+                    </div>
+                </EditForm>
+            }
+        </Content>
+    </ActionDialog>
+}
 <section class="section-container">
     <div class="container-middle-section">
         <TitleBar Title="Manage All Tags" WhereTo="/author/dashboard" Styles="my-12" />
@@ -40,8 +75,8 @@
                                     @t.Name
                                 </th>
                                 <td class="px-6 py-4 space-x-4">
-                                    <a href="/author/tags/edit" class="action-link">Edit</a>
-                                    <a href="/author/tags/edit" class="action-link">View</a>
+                                    <a class="action-link cursor-pointer" @onclick='(() => OpenActionDialog(t.TagId))'>Edit</a>
+                                    <a href="/tags/@t.TagId" class="action-link">View</a>
                                 </td>
                                 <td class="px-6 py-4">
                                     <button @onclick='(() => OpenDeleteDialog(t.TagId))'

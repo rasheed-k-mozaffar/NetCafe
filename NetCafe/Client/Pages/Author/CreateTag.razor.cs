@@ -26,7 +26,7 @@ public partial class CreateTag : ComponentBase
             {
                 successMessage = $"New tag ({tag.Name}) was created successfully! You'll be redirected in a moment...";
                 StateHasChanged();
-                await Task.Delay(3000); // wait three seconds before redirecting
+                await Task.Delay(2000); // wait three seconds before redirecting
                 Nav.NavigateTo("/author/dashboard");
             }
         }

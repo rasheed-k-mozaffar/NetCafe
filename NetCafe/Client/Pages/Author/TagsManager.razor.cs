@@ -16,6 +16,16 @@ public partial class TagsManager : ComponentBase
     private bool wantsToDeleteTag = false;
     private Guid tagToDeleteId;
 
+    // these variables are related to the action dialog
+    // in case there's an attempt to update a tag, initialize this instance
+    private ApiResponse<TagDto>? tagRetrievalResult;
+    private TagUpdateDto? updatedTag; // this object will be sent to update the tag
+    private bool wantsToUpdateTag = false;
+    private bool isRetrievingTagDetails = false;
+    private bool makingUpdateRequest = false;
+    private string tagUpdateErrorMessage = string.Empty;
+    private Guid tagToUpdateId;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -68,7 +78,74 @@ public partial class TagsManager : ComponentBase
     private void OpenDeleteDialog(Guid tagId)
     {
         wantsToDeleteTag = true;
-        StateHasChanged();
         tagToDeleteId = tagId;
+    }
+
+    private void CloseActionDialog()
+    {
+        wantsToUpdateTag = false;
+        // reset the objects
+        tagRetrievalResult = null;
+        updatedTag = null;
+    }
+
+    private async Task OpenActionDialog(Guid tagId)
+    {
+        tagToUpdateId = tagId;
+        isRetrievingTagDetails = true;
+        tagUpdateErrorMessage = string.Empty;
+        wantsToUpdateTag = true;
+
+        // retrieve the tag details from the database
+        try
+        {
+            tagRetrievalResult = await TagsService.GetTagByIdAsync(tagToUpdateId);
+            // tag was successfully retrieved
+            if (tagRetrievalResult.IsSuccess)
+            {
+                // map the details to the object used in the EditForm
+                updatedTag = new()
+                {
+                    Name = tagRetrievalResult.Value!.Name,
+                    Description = tagRetrievalResult.Value!.Description
+                };
+
+                // tag is ready to be displayed
+                isRetrievingTagDetails = false;
+            }
+        }
+        catch (DataRetrievalFailedException ex)
+        {
+            tagUpdateErrorMessage = ex.Message;
+        }
+    }
+
+    private async Task UpdateTagAsync()
+    {
+        makingUpdateRequest = true;
+        tagUpdateErrorMessage = string.Empty;
+        try
+        {
+            var result = await TagsService.UpdateTagAsync(tagToUpdateId, updatedTag!);
+            if (result.IsSuccess)
+            {
+                // update the tag on the client
+                var tagToUpdate = tags.FirstOrDefault(t => t.TagId == tagToUpdateId);
+                if (tagToUpdate is not null)
+                {
+                    tagToUpdate.Name = updatedTag!.Name;
+                }
+            }
+        }
+        catch (OperationFailureException ex)
+        {
+            tagUpdateErrorMessage = ex.Message;
+        }
+        // reset the variables involved in updating the tag
+        makingUpdateRequest = false;
+        wantsToUpdateTag = false;
+        tagRetrievalResult = null;
+        updatedTag = null;
+        tagToUpdateId = default;
     }
 }
