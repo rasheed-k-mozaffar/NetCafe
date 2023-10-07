@@ -16,7 +16,7 @@ builder.Services.AddScoped<ICommentsService, CommentsService>();
 builder.Services.AddScoped<IPostsService, PostsService>();
 builder.Services.AddScoped<ITagsService, TagsService>();
 builder.Services.AddScoped<IMailingListService, MailingListService>();
-
+builder.Services.AddScoped<ISeriesService, SeriesService>();
 // register the Authorization message handler as a transient service.
 builder.Services.AddTransient<AuthorizationMessageHandler>();
 // register the Local Storage Service in the DI container.
