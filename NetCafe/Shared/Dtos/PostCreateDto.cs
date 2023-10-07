@@ -15,5 +15,6 @@ public class PostCreateDto
     public string? Content { get; set; }
     public string? CoverImageUrl { get; set; }
     public Guid? SeriesId { get; set; }
-    public List<Guid>? TagIds { get; set; }
+    [MaxLength(3, ErrorMessage = "You can't select more than 3 tags for each post")]
+    public Guid[]? TagIds { get; set; }
 }
