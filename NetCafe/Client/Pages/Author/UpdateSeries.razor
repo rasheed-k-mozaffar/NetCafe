@@ -1,0 +1,172 @@
+﻿@page "/author/series/edit/{seriesId:guid}"
+@inject IFilesService FilesService
+@inject ISeriesService SeriesService
+@inject NavigationManager Nav
+<PageTitle>Author - Edit Series</PageTitle>
+
+<section class="section-container">
+    <div class="container-middle-section space-y-8">
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="my-5">
+                <ErrorAlert ErrorMessage="@errorMessage" />
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="my-5">
+                <SuccessAlert SuccessMessage="@successMessage" />
+            </div>
+        }
+
+        <TitleBar Title="Edit Series" WhereTo="/author/dashboard" Styles="my-5" />
+        @*COVER IMAGE*@
+        <div>
+            <h1 class="my-3">Choose a cover image</h1>
+            @if (!string.IsNullOrEmpty(fileUploadErrorMessage))
+            {
+                <ErrorAlert ErrorMessage="@fileUploadErrorMessage" />
+            }
+            <div class="flex justify-between">
+                <div>
+                    <InputFile OnChange="UploadCoverImage" />
+                </div>
+                <div>
+                    <button class="px-4 py-2 ring-1 ring-blue-700 font-bold hover:bg-blue-800 rounded-md"
+                        @onclick='(() => updatedSeries.CoverImageUrl = null)'>
+                        x
+                    </button>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(updatedSeries.CoverImageUrl))
+            {
+                <img src="@updatedSeries.CoverImageUrl" width="400" />
+            }
+        </div>
+
+        @*FORM FIELDS*@
+        <EditForm Model="updatedSeries" OnValidSubmit="HandleSeriesEditAsync">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <InputText class="title-input" @bind-Value="@updatedSeries.Name" placeholder="Series name" />
+                <ValidationMessage For="(() => updatedSeries.Name)" class="validation-msg" />
+            </div>
+
+            <div class="form-group">
+                <InputTextArea rows="6" class="text-area-input appearance-none" @bind-Value="@updatedSeries.Description"
+                    placeholder="Series description" />
+                <ValidationMessage For="(() => updatedSeries.Description)" class="validation-msg" />
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="submit-btn" disabled="@isMakingRequest">Confirm Modifications</button>
+            </div>
+        </EditForm>
+    </div>
+</section>
+
+@code {
+    [Parameter] public Guid SeriesId { get; set; }
+    private SeriesUpdateDto updatedSeries = new();
+    private bool isLoadingSeries = true;
+    private string errorMessage = string.Empty;
+    private string successMessage = string.Empty;
+
+    // File upload related properties
+    private string[] allowedFileExtensions = { ".jpeg", ".png", ".jpg" };
+    private int maxCoverImageSize = 1024 * 1024 * 5; // 5MB
+    private string? fileUploadErrorMessage = string.Empty;
+    private bool isMakingRequest = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        errorMessage = string.Empty;
+        try
+        {
+            var result = await SeriesService.GetSeriesByIdAsync(SeriesId);
+            if (result.IsSuccess)
+            {
+                updatedSeries.CoverImageUrl = result.Value!.CoverImageUrl;
+                updatedSeries.Name = result.Value!.Name;
+                updatedSeries.Description = result.Value!.Description;
+                // successMessage = "Series updated successfully! You'll now be redirected in a moment..."
+                isLoadingSeries = false;
+            }
+        }
+        catch (DataRetrievalFailedException ex)
+        {
+            errorMessage = ex.Message;
+        }
+    }
+
+    private async Task HandleSeriesEditAsync()
+    {
+        errorMessage = string.Empty;
+        successMessage = string.Empty;
+        isMakingRequest = true;
+        try
+        {
+            var result = await SeriesService.UpdateSeriesAsync(SeriesId, updatedSeries);
+            if (result.IsSuccess)
+            {
+                successMessage = "Series was updated successfully! You'll be redirected in a moment...";
+                StateHasChanged();
+                await Task.Delay(2000);
+                Nav.NavigateTo("/series/all");
+            }
+        }
+        catch (OperationFailureException ex)
+        {
+            errorMessage = ex.Message;
+        }
+        isMakingRequest = false;
+    }
+    private async Task UploadCoverImage(InputFileChangeEventArgs e)
+    {
+        if (e.File is null)
+        {
+            fileUploadErrorMessage = "Please select a file!";
+            return;
+        }
+
+        if (e.File.Size > maxCoverImageSize)
+        {
+            fileUploadErrorMessage = "The file you selected has a size that exceeded the max allowed size";
+            return;
+        }
+        isMakingRequest = true;
+        fileUploadErrorMessage = string.Empty;
+        string extension = Path.GetExtension(e.File.Name);
+        // use of an allowed extension
+        if (!allowedFileExtensions.Contains(extension))
+        {
+            fileUploadErrorMessage = $"The image extension ({extension}) is not acceptable";
+            return;
+        }
+        try
+        {
+            // convert IBrowseFile to an IFormFile
+            var imageFile = await ConvertToIFormFile(e.File);
+            var result = await FilesService.UploadFileAsync(imageFile);
+            // set the cover image URL to the retrieved image URL from the api
+            updatedSeries.CoverImageUrl = result.Value;
+        }
+        catch (FileUploadFailedException ex)
+        {
+            fileUploadErrorMessage = ex.Message;
+        }
+        isMakingRequest = false;
+    }
+
+    private async Task<Microsoft.AspNetCore.Http.IFormFile> ConvertToIFormFile(IBrowserFile browserFile)
+    {
+        Stream stream = browserFile.OpenReadStream(maxAllowedSize: maxCoverImageSize);
+        MemoryStream memoryStream = new MemoryStream();
+        await stream.CopyToAsync(memoryStream);
+        return new Microsoft.AspNetCore.Http.Internal.FormFile(memoryStream, 0, memoryStream.Length, "file", browserFile.Name);
+    }
+}
