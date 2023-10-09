@@ -60,6 +60,7 @@ public partial class TagsManager : ComponentBase
                 var tagToDelete = tags.FirstOrDefault(t => t.TagId == tagToDeleteId);
                 tags.Remove(tagToDelete!);
                 wantsToDeleteTag = false;
+                tagToDeleteId = default;
                 StateHasChanged();
             }
         }
