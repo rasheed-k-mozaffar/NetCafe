@@ -1,0 +1,22 @@
+﻿@inject NavigationManager Nav
+<div
+    class="my-5 w-full bg-white border transition-all shadow-md border-gray-200 rounded-lg hover:shadow-2xl dark:bg-gray-800 dark:border-gray-700">
+    <img class="rounded-t-lg w-full object-cover max-h-[300px]" src="@Series.CoverImageUrl" alt="Series Cover" />
+    <div class="p-5">
+        <h5 class="mb-2 text-3xl font-extrabold tracking-tight text-gray-800 dark:text-white">@Series.Name</h5>
+        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">@Series.Description...</p>
+        <button @onclick='(() => Nav.NavigateTo($"/series/{Series.SeriesId}"))'
+            class="flex items-center justify-center w-full py-3 bg-blue-700 text-white hover:bg-blue-800 rounded-lg">
+            Explore More
+            <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M1 5h12m0 0L9 1m4 4L9 9" />
+            </svg>
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public SeriesSummaryDto Series { get; set; } = null!;
+}
