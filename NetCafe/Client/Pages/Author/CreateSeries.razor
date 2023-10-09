@@ -1,0 +1,67 @@
+﻿@page "/author/series/new"
+
+<PageTitle>Series - Create</PageTitle>
+
+<section class="section-container">
+    <div class="container-middle-section space-y-8">
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="my-5">
+                <ErrorAlert ErrorMessage="@errorMessage" />
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="my-5">
+                <SuccessAlert SuccessMessage="@successMessage" />
+            </div>
+        }
+
+        <TitleBar Title="Create New Series" WhereTo="/author/dashboard" Styles="my-5" />
+        @*COVER IMAGE*@
+        <div>
+            <h1 class="my-3">Choose a cover image</h1>
+            @if (!string.IsNullOrEmpty(fileUploadErrorMessage))
+            {
+                <ErrorAlert ErrorMessage="@fileUploadErrorMessage" />
+            }
+            <div class="flex justify-between">
+                <div>
+                    <InputFile OnChange="UploadCoverImage" />
+                </div>
+                <div>
+                    <button class="px-4 py-2 ring-1 ring-blue-700 font-bold hover:bg-blue-800 rounded-md"
+                        @onclick='(() => series.CoverImageUrl = null)'>
+                        x
+                    </button>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(series.CoverImageUrl))
+            {
+                <img src="@series.CoverImageUrl" width="400" />
+            }
+        </div>
+
+        @*FORM FIELDS*@
+        <EditForm Model="series" OnValidSubmit="HandleSeriesCreationAsync">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <InputText class="title-input" @bind-Value="@series.Name" placeholder="Series name" />
+                <ValidationMessage For="(() => series.Name)" class="validation-msg" />
+            </div>
+
+            <div class="form-group">
+                <InputTextArea rows="6" class="text-area-input appearance-none" @bind-Value="@series.Description"
+                    placeholder="Series description" />
+                <ValidationMessage For="(() => series.Description)" class="validation-msg" />
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="submit-btn" disabled="@isMakingRequest">Create Series</button>
+            </div>
+        </EditForm>
+    </div>
+</section>
