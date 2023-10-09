@@ -1,29 +1,34 @@
 ﻿@page "/"
+@inject IFilesService FilesService
 
-<section class="h-[90vh] bg-cover flex justify-center items-center flex-col">
-    <div class="max-w-4xl p-4 text-center">
-        <h1
-            class="text-gray-800 text-6xl xl:text-6xl lg:text-6xl md:text-5xl sm:text-4xl font-extrabold dark:text-white">
-            Hello, I'm Rasheed 👋🏻</h1>
-        <p class="text-gray-600 font-light dark:text-gray-200 mt-3">
-            Hi! My name is <span class="text-blue-500 font-bold">Rasheed Mozaffar</span> and this is my personal blog.
-            I've been coding for more than a
-            year now
-            and along side coding, I found my passion in writing and sharing the knowledge I have with others, be it
-            <b>C#
-                (My favorite), HTML & CSS, Web development technologies OR any general programming concepts</b>.
-            This blog isn't only about coding. It's also about my journey and discoveries, the challenges I face, the
-            projects I make, and any thoughts that come to my mind, so I'm sure you'll find something that piques your
-            interest here!
-        </p>
-    </div>
+<div class="space-y-5">
+    <Hero />
+    <AllPosts />
+</div>
 
-    <div>
-        <p class="my-5 text-gray-700 dark:text-gray-100 ">If you want to hear from me, you can sign up for
-            mailing list below!</p>
-    </div>
-    <div class="flex space-x-2">
-        <input class="text-input w-96" placeholder="type your email" />
-        <button class="px-4 py-2 rounded-md bg-blue-600 text-white text-sm">Join</button>
-    </div>
-</section>
+@code {
+    private string image = "";
+    private async Task UploadImage(InputFileChangeEventArgs e)
+    {
+        // turn the IBrowseFile into a form file
+        var conversion = await ConvertToIFormFile(e.File);
+        try
+        {
+            var result = await FilesService.UploadFileAsync(conversion);
+            image = result.Value!;
+            Console.WriteLine($"The file was uploaded, its URL is: {result.Value}");
+        }
+        catch (FileUploadFailedException ex)
+        {
+            Console.WriteLine($"ERROR: {ex.Message}");
+        }
+    }
+
+    public static async Task<Microsoft.AspNetCore.Http.IFormFile> ConvertToIFormFile(IBrowserFile browserFile)
+    {
+        Stream stream = browserFile.OpenReadStream();
+        MemoryStream memoryStream = new MemoryStream();
+        await stream.CopyToAsync(memoryStream);
+        return new Microsoft.AspNetCore.Http.Internal.FormFile(memoryStream, 0, memoryStream.Length, "file", browserFile.Name);
+    }
+}

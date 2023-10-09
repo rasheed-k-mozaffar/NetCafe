@@ -1,11 +1,24 @@
-﻿<nav class="bg-white p-4 border-b-2 slaty-border dark:bg-slate-800">
+﻿@inject NavigationManager Navigation
+<nav class="bg-white p-4 border-b-2 slaty-border transition-all dark:bg-jet-black">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto">
         <div>
             <h1 class="dark:text-white text-lg font-bold">Rasheed's Blog</h1>
         </div>
         <div class="flex md:order-2 gap-2">
             @Toggler
-            <NavBarButton Text="Sign in" class="space-x-2" />
+            <AuthorizeView>
+                <Authorized>
+                    @if (context.User.FindFirst(ClaimTypes.Role)!.Value == "AUTHOR")
+                    {
+                        <AuthorDashButton />
+                    }
+                </Authorized>
+
+                <NotAuthorized>
+                    <NavBarButton Text="Sign in" class="space-x-2"
+                        @onclick='(() => Navigation.NavigateTo("/user/sign-in"))' />
+                </NotAuthorized>
+            </AuthorizeView>
             <button @onclick="ToggleMenu"
                 class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-slate-400 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -17,17 +30,19 @@
         </div>
         <div class="items-center justify-between @(isHidden ? "hidden" : null) w-full md:flex md:w-auto md:order-1">
             <ul
-                class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-slate-600 rounded-lg md:flex-row gap-y-2 md:space-x-8 md:mt-0 md:border-0">
+                class="list-none flex flex-col p-4 md:p-0 mt-4 font-medium border border-slate-600 rounded-lg md:flex-row gap-y-2 md:space-x-8 md:mt-0 md:border-0">
                 <li>
-                    <NavLink Href="#" class="nav-link block py-2 pl-3 pr-4">Home</NavLink>
+                    <NavLink href="/" Match="NavLinkMatch.All" class="nav-link block py-2 pl-4 pr-4">Home</NavLink>
                 </li>
 
                 <li>
-                    <NavLink Href="#" class="nav-link block py-2 pl-3 pr-4">Series</NavLink>
+                    <NavLink href="/series/all" Match="NavLinkMatch.All" class="nav-link block py-2 pl-4 pr-4">Series
+                    </NavLink>
                 </li>
 
                 <li>
-                    <NavLink Href="#" class="nav-link block py-2 pl-3 pr-4">About</NavLink>
+                    <NavLink href="/about" Match="NavLinkMatch.All" class="nav-link block py-2 pl-4 pr-4">About
+                    </NavLink>
                 </li>
             </ul>
         </div>
@@ -36,18 +51,10 @@
 
 @code {
     [Parameter] public RenderFragment? Toggler { get; set; }
-    private bool isHidden = false;
+    private bool isHidden = true;
 
     private void ToggleMenu()
     {
         isHidden = !isHidden;
     }
 }
-@* <AuthorizeView>
-<Authorized>
-
-</Authorized>
-<NotAuthorized>
-
-</NotAuthorized>
-</AuthorizeView> *@

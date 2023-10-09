@@ -24,7 +24,7 @@
     }
 
     .check-box {
-        @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600
+        @apply w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded transition-all focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600
     }
 
     .form-label {
@@ -72,11 +72,11 @@
     }
 
     .section-container {
-        @apply max-w-4xl 2xl:max-w-4xl xl:max-w-4xl lg:max-w-4xl md:max-w-3xl sm:max-w-full mx-auto bg-gray-100 dark:bg-slate-800
+        @apply max-w-4xl 2xl:max-w-4xl xl:max-w-4xl lg:max-w-4xl md:max-w-3xl transition-all sm:max-w-full mx-auto bg-gray-100 dark:bg-slate-800
     }
 
     .container-middle-section {
-        @apply mx-auto min-h-screen border-x-2 border-x-slate-900/5 dark:border-x-blue-600 p-8 bg-white dark:bg-jet-black
+        @apply mx-auto min-h-screen border-x-2 border-x-slate-900/5 transition-all dark:border-x-blue-600 p-8 bg-white dark:bg-jet-black
     }
 
     .title-input {
@@ -88,11 +88,11 @@
     }
 
     .text-area-input {
-        @apply block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+        @apply block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 transition-all dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
     }
 
     .table-row {
-        @apply bg-white border-b dark:bg-gray-900 dark:border-gray-700
+        @apply bg-white border-b dark:bg-gray-900 dark:border-gray-700 transition-all
     }
 
     .action-button {
