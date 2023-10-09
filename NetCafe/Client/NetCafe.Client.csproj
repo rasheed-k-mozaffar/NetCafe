@@ -11,22 +11,22 @@
     <ExternalConsole>true</ExternalConsole>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.10"/>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.10" PrivateAssets="all"/>
-    <PackageReference Include="Microsoft.Extensions.Http" Version="*"/>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.0-preview2-final"/>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="*"/>
-    <PackageReference Include="Blazored.LocalStorage" Version="*"/>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="*"/>
-    <PackageReference Include="PSC.Blazor.Components.MarkdownEditor" Version="2.0.11"/>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.10" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.1.0-preview2-final" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="*" />
+    <PackageReference Include="Blazored.LocalStorage" Version="*" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="*" />
+    <PackageReference Include="PSC.Blazor.Components.MarkdownEditor" Version="2.0.11" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Shared\NetCafe.Shared.csproj"/>
+    <ProjectReference Include="..\Shared\NetCafe.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Shared\"/>
+    <None Remove="Shared\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="wwwroot/Images/"/>
+    <Folder Include="wwwroot/Images/" />
   </ItemGroup>
 </Project>
