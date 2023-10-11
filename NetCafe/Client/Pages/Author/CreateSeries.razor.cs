@@ -73,7 +73,7 @@ public partial class CreateSeries : ComponentBase
             var imageFile = await ConvertToIFormFile(e.File);
             var result = await FilesService.UploadFileAsync(imageFile);
             // set the cover image URL to the retrieved image URL from the api
-            series.CoverImageUrl = result.Value;
+            series.CoverImageUrl = result;
         }
         catch (FileUploadFailedException ex)
         {
