@@ -153,7 +153,7 @@
             var imageFile = await ConvertToIFormFile(e.File);
             var result = await FilesService.UploadFileAsync(imageFile);
             // set the cover image URL to the retrieved image URL from the api
-            updatedSeries.CoverImageUrl = result.Value;
+            updatedSeries.CoverImageUrl = result;
         }
         catch (FileUploadFailedException ex)
         {
