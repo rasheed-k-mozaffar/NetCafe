@@ -15,6 +15,7 @@ public static class DataMapper
             PublishedOn = post.PublishedOn,
             ModifiedOn = post.ModifiedOn,
             Likes = post.Likes,
+            IsPublished = post.IsPublished,
             Tags = post.Tags?.Select(t => t.ToTagSummary()).ToList()
         };
     }
@@ -31,6 +32,7 @@ public static class DataMapper
             Content = post.Content,
             Views = post.Views,
             Likes = post.Likes,
+            IsPublished = post.IsPublished,
             PublishedOn = post.PublishedOn,
             ModifiedOn = post.ModifiedOn,
             Comments = post.Comments?.Select(c => c.ToCommentDto()).ToList(),
@@ -126,7 +128,8 @@ public static class ModelMapper
             Content = post.Content,
             SeriesId = post.SeriesId,
             PublishedOn = DateTime.UtcNow,
-            CoverImageUrl = post.CoverImageUrl
+            CoverImageUrl = post.CoverImageUrl,
+            IsPublished = post.IsPublished,
         };
     }
     #endregion

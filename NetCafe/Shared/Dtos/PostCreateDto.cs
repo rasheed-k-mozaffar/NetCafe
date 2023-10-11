@@ -14,6 +14,7 @@ public class PostCreateDto
     [MaxLength(1_500_000, ErrorMessage = "The content of the post should not exceed 1,500,000 characters")]
     public string? Content { get; set; }
     public string? CoverImageUrl { get; set; }
+    public bool IsPublished { get; set; }
     public Guid? SeriesId { get; set; }
     [MaxLength(3, ErrorMessage = "You can't select more than 3 tags for each post")]
     public Guid[]? TagIds { get; set; }

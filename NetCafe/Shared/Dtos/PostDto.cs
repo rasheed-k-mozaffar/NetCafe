@@ -8,6 +8,7 @@ public class PostDto
     public string? CoverImageUrl { get; set; }
     public string? Title { get; set; }
     public string? Content { get; set; }
+    public bool IsPublished { get; set; }
     public DateTime PublishedOn { get; set; }
     public DateTime? ModifiedOn { get; set; }
     public int Views { get; set; }
