@@ -53,7 +53,7 @@ public class PostsService : IPostsService
 
     public async Task<ApiResponse<PostDto>> GetPostByIdAsync(Guid postId)
     {
-        var response = await httpClient.GetAsync("/api/posts/{postId}");
+        var response = await httpClient.GetAsync($"/api/posts/{postId}");
 
         if (!response.IsSuccessStatusCode)
         {
