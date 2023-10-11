@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using NetCafe.Client;
-
+using Radzen;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -19,6 +19,9 @@ builder.Services.AddScoped<IMailingListService, MailingListService>();
 builder.Services.AddScoped<ISeriesService, SeriesService>();
 // register the Authorization message handler as a transient service.
 builder.Services.AddTransient<AuthorizationMessageHandler>();
+// register radzen components
+builder.Services.AddRadzenComponents();
+builder.Services.AddScoped<DialogService>();
 // register the Local Storage Service in the DI container.
 builder.Services.AddBlazoredLocalStorage();
 // add the custom-made authentication system
