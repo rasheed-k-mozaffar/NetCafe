@@ -1,0 +1,97 @@
+﻿@page "/author/posts/new"
+
+<PageTitle>Posts - Create</PageTitle>
+
+<div class="p-4">
+    <h1 class="text-5xl font-extrabold dark:text-white">Create Post</h1>
+</div>
+<main class="max-w-4xl 2xl:max-w-4xl xl:max-w-4xl lg:max-w-4xl md:max-w-3xl sm:max-w-full mx-auto mt-8 p-1">
+    <div class="border-2 border-slate-900/5 p-5 rounded-md dark:bg-white">
+        <div class="mt-8">
+            <EditForm Model="post" OnValidSubmit="HandlePostCreation" class="space-y-6">
+                <DataAnnotationsValidator />
+                <div>
+                    <InputText class="title-input" @bind-Value="post.Title" Placeholder="Post Title" />
+                    <ValidationMessage For="(() => post.Title)" class="validation-msg" />
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    @*TAGS SELECTION*@
+                    <div>
+                        <RadzenDropDown Placeholder="Select Relevant Tags " TValue="IEnumerable<Guid>" Data="tags"
+                                        TextProperty="Name" ValueProperty="TagId" Multiple="true" @bind-Value="selectedTags"
+                                        Change="TagsChanged" Chips="true"></RadzenDropDown>
+                    </div>
+                </div>
+                @*SERIES SELECTION*@
+                <div>
+                    <RadzenDropDown TValue="Guid?" Data="series" TextProperty="Name" ValueProperty="SeriesId"
+                                    @bind-Value="selectedSeries" />
+                </div>
+                @if (!string.IsNullOrEmpty(tagSelectionError))
+                {
+                    <div class="my-2">
+                        <ErrorAlert ErrorMessage="@tagSelectionError" />
+                    </div>
+                }
+
+                @*COVER IMAGE SELECTION*@
+                <div class="my-8">
+                    <div>
+                        <h1 class="my-3">Choose a cover image</h1>
+                        @if (!string.IsNullOrEmpty(fileUploadErrorMessage))
+                        {
+                            <ErrorAlert ErrorMessage="@fileUploadErrorMessage" />
+                        }
+                        <div class="flex justify-between">
+                            <div>
+                                <InputFile OnChange="UploadCoverImage" />
+                            </div>
+                            <div>
+                                <button type="button"
+                                        class="px-4 py-2 ring-1 ring-blue-700 font-bold hover:bg-blue-800 rounded-md"
+                                        @onclick='(() => post.CoverImageUrl = null)'>
+                                    x
+                                </button>
+                            </div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(post.CoverImageUrl))
+                        {
+                            <img src="@post.CoverImageUrl" width="400" />
+                        }
+                    </div>
+                </div>
+
+                @* MARK DOWN EDITOR *@
+                <RadzenHtmlEditor @bind-Value="@post.Content" UploadUrl="/api/files" Style="min-height: 400px">
+                    <RadzenHtmlEditorBold />
+                    <RadzenHtmlEditorUnderline />
+                    <RadzenHtmlEditorItalic />
+                    <RadzenHtmlEditorStrikeThrough />
+                    <RadzenHtmlEditorSeparator />
+                    <RadzenHtmlEditorAlignLeft />
+                    <RadzenHtmlEditorAlignCenter />
+                    <RadzenHtmlEditorAlignRight />
+                    <RadzenHtmlEditorSeparator />
+                    <RadzenHtmlEditorColor />
+                    <RadzenHtmlEditorBackground />
+                    <RadzenHtmlEditorImage />
+                    <RadzenHtmlEditorSeparator />
+                    <RadzenHtmlEditorJustify />
+                    <RadzenHtmlEditorFontName />
+                    <RadzenHtmlEditorFontSize />
+                    <RadzenHtmlEditorFormatBlock />
+                    <RadzenHtmlEditorSeparator />
+                    <RadzenHtmlEditorUnorderedList />
+                    <RadzenHtmlEditorOrderedList />
+                    <RadzenHtmlEditorSeparator />
+                    <RadzenHtmlEditorLink />
+                </RadzenHtmlEditor>
+                <ValidationMessage For="(() => post.Content)" class="validation-msg" />
+
+                <button type="submit" class="submit-btn" disabled="@isMakingRequest">Publish</button>
+            </EditForm>
+
+        </div>
+    </div>
+</main>
