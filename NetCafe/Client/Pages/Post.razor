@@ -18,6 +18,10 @@
         }
         else
         {
+            @if (!post.IsPublished)
+            {
+                <ErrorAlert ErrorMessage="This post is a draft and is not publicly accessible." />
+            }
             @if (!string.IsNullOrEmpty(post.CoverImageUrl))
             {
                 <div>
@@ -40,8 +44,19 @@
                 @post.Title</h1>
             </div>
 
-            <div class="my-4">
+            <div class="my-4 flex justify-between items-center">
             <p class="text-light text-gray-500 dark:text-gray-400">@post.PublishedOn.ToShortDateString()</p>
+
+                <div>
+                    <AuthorizeView>
+                        <Authorized>
+                            @if (context.User.FindFirst(ClaimTypes.Role).Value == "AUTHOR")
+                            {
+                                <a href="/author/posts/edit/@post.PostId" class="action-link">Edit</a>
+                            }
+                        </Authorized>
+                    </AuthorizeView>
+                </div>
             </div>
 
             <div class="mt-3 flex space-x-4">

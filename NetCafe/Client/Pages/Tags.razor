@@ -16,14 +16,14 @@
         else
         {
             @* DATA RETRIEVED*@
-            <PatternedPageHeader Title="@tagData.Name" Subtitle="@($"{tagData.Posts?.Count} Posts")"
+            <PatternedPageHeader Title="@tagData.Name" Subtitle="@($"{posts.Count} Posts")"
                 Description="@tagData.Description" />
 
-            @if (tagData.Posts is not null && tagData.Posts.Any())
+            @if (posts is not null && posts.Any())
             {
                 @* THERE ARE POSTS ADDED WITH THIS TAG *@
                 <div class="mt-8">
-                    <PostsDataList Posts="@tagData.Posts.ToList()" />
+                    <PostsDataList Posts="@posts" />
                 </div>
             }
             else
@@ -176,6 +176,7 @@
     private bool isLoadingData = true;
     private string? errorMessage = string.Empty;
     private TagDataDto tagData = new();
+    private List<PostSummaryDto>? posts;
     protected override async Task OnInitializedAsync()
     {
         // make the call for the base method
@@ -186,6 +187,7 @@
             if (result.IsSuccess)
             {
                 tagData = result.Value!;
+                posts = tagData.Posts.Where(p => p.IsPublished == true).ToList();
             }
         }
         catch (DataRetrievalFailedException ex)

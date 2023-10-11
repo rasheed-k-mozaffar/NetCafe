@@ -24,7 +24,11 @@ public partial class AllPosts : ComponentBase
             requestResult = await PostsService.GetAllPostsAsync();
             if (requestResult.IsSuccess)
             {
-                posts = requestResult.Value?.ToList();
+                // only display the posts that are publicly available 
+                // (is published is true)
+                posts = requestResult.Value?
+                .Where(p => p.IsPublished == true)
+                .ToList();
             }
         }
         catch (DataRetrievalFailedException ex)

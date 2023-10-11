@@ -4,8 +4,8 @@
 
 <PageTitle>Series - @series.Name</PageTitle>
 
-    <section class="w-full">
-        <div class="max-w-4xl mx-auto min-h-screen p-8 borded-x-2 border-slate-900/5">
+    <section class="section-container">
+        <div class="container-middle-section">
             @if (isLoadingData)
         {
             <div class="mt-8">
@@ -17,15 +17,18 @@
             <div class="space-y-8">
                 <div class="flex justify-between items-center">
                     <h1 class="text-4xl font-extrabold transition-all dark:text-white">@series.Name</h1>
-                    <button @onclick="StartSeries"
-                        class="px-5 py-2 text-white rounded-lg bg-blue-700 hover:bg-blue-800 text-sm flex justify-center items-center">
-                        Start Series
-                        <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M1 5h12m0 0L9 1m4 4L9 9" />
-                        </svg>
-                    </button>
+                    @if (posts is not null && posts.Any())
+                    {
+                        <button @onclick="StartSeries"
+                            class="px-5 py-2 text-white rounded-lg bg-blue-700 hover:bg-blue-800 text-sm flex justify-center items-center">
+                            Start Series
+                            <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M1 5h12m0 0L9 1m4 4L9 9" />
+                            </svg>
+                        </button>
+                    }
                 </div>
 
                 <div>
@@ -34,7 +37,7 @@
                 </div>
 
                 <p class="font-light text-gray-600 transition-all dark:text-gray-400">@series.Description</p>
-                @if (series.Posts is not null && series.Posts.Any())
+                @if (posts is not null && posts.Any())
                 {
                     <PostsDataList Posts="posts" />
                 }
@@ -208,7 +211,7 @@
 
                 if (series.Posts is not null && series.Posts.Any())
                 {
-                    posts = series.Posts.OrderBy(p => p.PublishedOn).ToList();
+                    posts = series.Posts.Where(p => p.IsPublished == true).OrderBy(p => p.PublishedOn).ToList();
                 }
                 isLoadingData = false;
             }
