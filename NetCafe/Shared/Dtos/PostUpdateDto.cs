@@ -15,5 +15,5 @@ public class PostUpdateDto
     [MaxLength(150, ErrorMessage = "The content of the post should not exceed 15,000 characters")]
     public string? Content { get; set; }
     public Guid? SeriesId { get; set; }
-    public List<TagDto>? Tags { get; set; }
+    public Guid[]? TagIds { get; set; }
 }

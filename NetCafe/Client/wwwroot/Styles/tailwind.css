@@ -60,11 +60,11 @@
     }
 
     ul {
-        @apply list-disc
+        @apply list-disc list-inside p-2
     }
 
     ol {
-        @apply list-decimal
+        @apply list-decimal list-inside p-2
     }
 
     .dash-action-link {
@@ -76,7 +76,7 @@
     }
 
     .container-middle-section {
-        @apply mx-auto min-h-screen border-x-2 border-x-slate-900/5 transition-all dark:border-x-blue-600 p-8 bg-white dark:bg-jet-black
+        @apply mx-auto min-h-screen p-8 bg-white dark:bg-jet-black
     }
 
     .title-input {

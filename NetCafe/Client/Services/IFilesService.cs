@@ -4,5 +4,5 @@ namespace NetCafe.Client.Services;
 
 public interface IFilesService
 {
-    Task<ApiResponse<string>> UploadFileAsync(IFormFile file);
+    Task<string> UploadFileAsync(IFormFile file);
 }

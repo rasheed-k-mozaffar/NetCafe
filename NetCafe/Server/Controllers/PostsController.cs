@@ -181,8 +181,23 @@ public class PostsController : BaseController
             postToUpdate.Content = model.Content;
             postToUpdate.ModifiedOn = DateTime.UtcNow;
             postToUpdate.SeriesId = model.SeriesId;
-            postToUpdate.Tags = model.Tags?.Select(t => t.ToTag()).ToList();
             postToUpdate.CoverImageUrl = model.CoverImageUrl;
+
+            if (model.TagIds is not null && model.TagIds.Any())
+            {
+                if(postToUpdate.Tags is not null && postToUpdate.Tags.Any()) {
+                    postToUpdate.Tags.Clear();
+                }
+                foreach (var tagId in model.TagIds)
+                {
+                    var tag = await context.Tags.FindAsync(tagId);
+
+                    if (tag is not null)
+                    {
+                        postToUpdate.Tags?.Add(tag);
+                    }
+                }
+            }
 
             await context.SaveChangesAsync();
             logger.LogInformation("Post with ID: {id} was successfully updated", id);

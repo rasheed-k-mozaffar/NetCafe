@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 
 namespace NetCafe.Client.Services;
@@ -12,7 +13,7 @@ public class FilesService : IFilesService
         this.httpClient = httpClient;
     }
 
-    public async Task<ApiResponse<string>> UploadFileAsync(IFormFile file)
+    public async Task<string> UploadFileAsync(IFormFile file)
     {
         var formData = new MultipartFormDataContent();
         var streamContent = new StreamContent(file.OpenReadStream());
@@ -23,8 +24,12 @@ public class FilesService : IFilesService
             var error = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
             throw new FileUploadFailedException(message: error!.Message!);
         }
-        var result = await response.Content.ReadFromJsonAsync<ApiResponse<string>>();
-        return result!;
+        var result = await response.Content.ReadFromJsonAsync<UrlObject>();
+        return result!.Url!;
     }
+}
+
+public class UrlObject {
+    public string? Url { get; set; }
 }
 
