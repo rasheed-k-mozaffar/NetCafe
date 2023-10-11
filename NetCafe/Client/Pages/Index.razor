@@ -7,28 +7,5 @@
 </div>
 
 @code {
-    private string image = "";
-    private async Task UploadImage(InputFileChangeEventArgs e)
-    {
-        // turn the IBrowseFile into a form file
-        var conversion = await ConvertToIFormFile(e.File);
-        try
-        {
-            var result = await FilesService.UploadFileAsync(conversion);
-            image = result.Value!;
-            Console.WriteLine($"The file was uploaded, its URL is: {result.Value}");
-        }
-        catch (FileUploadFailedException ex)
-        {
-            Console.WriteLine($"ERROR: {ex.Message}");
-        }
-    }
 
-    public static async Task<Microsoft.AspNetCore.Http.IFormFile> ConvertToIFormFile(IBrowserFile browserFile)
-    {
-        Stream stream = browserFile.OpenReadStream();
-        MemoryStream memoryStream = new MemoryStream();
-        await stream.CopyToAsync(memoryStream);
-        return new Microsoft.AspNetCore.Http.Internal.FormFile(memoryStream, 0, memoryStream.Length, "file", browserFile.Name);
-    }
 }

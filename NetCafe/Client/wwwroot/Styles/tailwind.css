@@ -80,7 +80,7 @@
     }
 
     .title-input {
-        @apply bg-transparent p-2 border-b-2 border-gray-300 text-3xl font-bold w-full dark:placeholder:text-gray-400 dark:text-white
+        @apply bg-transparent p-2 border-b-2 border-gray-300 text-3xl font-bold w-full dark:placeholder:text-gray-400
     }
 
     .submit-btn {
