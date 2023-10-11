@@ -1,37 +1,39 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Http;
 
 namespace NetCafe.Client.Pages.Author;
 
-public partial class CreatePost : ComponentBase
+public partial class UpdatePost : ComponentBase
 {
+    [Parameter] public Guid PostId { get; set; }
+
     #region Injected Dependencies
     [Inject]
-    public NavigationManager Navigation { get; set; } = default!;
-    [Inject]
-    public IFilesService FilesService { get; set; } = default!;
+    public NavigationManager Nav { get; set; } = default!;
     [Inject]
     public IPostsService PostsService { get; set; } = default!;
     [Inject]
+    public ISeriesService SeriesService { get; set; } = default!;
+    [Inject]
     public ITagsService TagsService { get; set; } = default!;
     [Inject]
-    public ISeriesService SeriesService { get; set; } = default!;
+    public IFilesService FilesService { get; set; } = default!;
     #endregion
 
-    #region variables
+    #region  Variables
+    private bool isLoadingData = true;
     private bool isMakingRequest = false;
     private string errorMessage = string.Empty;
-    private PostCreateDto post = new();
+    private string successMessage = string.Empty;
+    private PostDto oldPost = new();
+    private PostUpdateDto updatedPost = new();
 
-    // Series select related variables
-    private List<SeriesSummaryDto> series = new();
-    private Guid? selectedSeries;
-
-    // Tag select related variables
     private List<TagSummaryDto> tags = new();
     IEnumerable<Guid>? selectedTags;
     private string tagSelectionError = string.Empty;
+    private List<SeriesSummaryDto> series = new();
+    private Guid? selectedSeries;
+
 
     // File upload related properties
     private string[] allowedFileExtensions = { ".jpeg", ".png", ".jpg" };
@@ -41,20 +43,32 @@ public partial class CreatePost : ComponentBase
 
     protected override async Task OnInitializedAsync()
     {
-        errorMessage = string.Empty;
         await base.OnInitializedAsync();
         try
         {
-            var result = await TagsService.GetAllTagsAsync();
+            var result = await PostsService.GetPostByIdAsync(PostId);
             if (result.IsSuccess)
             {
-                tags = result.Value!.ToList();
-            }
+                // map the retrieved post to a Post Update Object
+                oldPost = result.Value!;
+                updatedPost = new()
+                {
+                    Title = oldPost.Title,
+                    Content = oldPost.Content,
+                    CoverImageUrl = oldPost.CoverImageUrl
+                };
 
-            var seriesResults = await SeriesService.GetAllSeriesAsync();
-            if (seriesResults.IsSuccess)
-            {
-                series = seriesResults.Value!.ToList();
+                // map the tags
+                if (oldPost.Tags is not null && oldPost.Tags.Any())
+                {
+                    selectedTags = oldPost.Tags.Select(t => t.TagId);
+                }
+
+                if (oldPost.SeriesId is not null)
+                {
+                    selectedSeries = oldPost.SeriesId;
+                }
+                isLoadingData = false;
             }
         }
         catch (DataRetrievalFailedException ex)
@@ -72,7 +86,33 @@ public partial class CreatePost : ComponentBase
             tagSelectionError = "You can't select more than 3 tags";
         }
     }
-    private async Task HandlePostCreation()
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+        errorMessage = string.Empty;
+        try
+        {
+            var tagResults = await TagsService.GetAllTagsAsync();
+            if (tagResults.IsSuccess)
+            {
+                tags = tagResults.Value!.ToList();
+            }
+
+            var seriesResults = await SeriesService.GetAllSeriesAsync();
+            if (seriesResults.IsSuccess)
+            {
+                series = seriesResults.Value!.ToList();
+            }
+        }
+        catch (DataRetrievalFailedException ex)
+        {
+            errorMessage = ex.Message;
+        }
+
+    }
+
+    private async Task HandlePostUpdateAsync()
     {
         isMakingRequest = true;
         errorMessage = string.Empty;
@@ -80,22 +120,26 @@ public partial class CreatePost : ComponentBase
         {
             if (selectedTags is not null && selectedTags.Any())
             {
-                post.TagIds = selectedTags.ToArray();
+                updatedPost.TagIds = selectedTags.ToArray();
             }
 
             if (selectedSeries is not null)
             {
-                post.SeriesId = selectedSeries;
+                updatedPost.SeriesId = selectedSeries;
             }
-            // set the IsPublished boolean to true to make the post public
-            post.IsPublished = true;
-            var result = await PostsService.CreatePostAsync(post);
+            // change the publishing state to true so the post is public now
+            updatedPost.IsPublished = true;
+            var result = await PostsService.UpdatePostAsync(PostId, updatedPost);
+
             if (result.IsSuccess)
             {
-                Console.WriteLine(result.Message);
+                successMessage = "The post was successfully updated! you'll be redirected in a moment...";
+                StateHasChanged();
+                await Task.Delay(2000);
+                Nav.NavigateTo($"/posts/{PostId}");
             }
         }
-        catch (DataInsertionFailedException ex)
+        catch (OperationFailureException ex)
         {
             errorMessage = ex.Message;
         }
@@ -110,22 +154,26 @@ public partial class CreatePost : ComponentBase
         {
             if (selectedTags is not null && selectedTags.Any())
             {
-                post.TagIds = selectedTags.ToArray();
+                updatedPost.TagIds = selectedTags.ToArray();
             }
 
             if (selectedSeries is not null)
             {
-                post.SeriesId = selectedSeries;
+                updatedPost.SeriesId = selectedSeries;
             }
-            // set the IsPublished boolean to false to make the post private
-            post.IsPublished = false;
-            var result = await PostsService.CreatePostAsync(post);
+            // change the publishing state to false so the post is private now
+            updatedPost.IsPublished = false;
+            var result = await PostsService.UpdatePostAsync(PostId, updatedPost);
+
             if (result.IsSuccess)
             {
-                Console.WriteLine(result.Message);
+                successMessage = "The post was successfully updated! you'll be redirected in a moment...";
+                StateHasChanged();
+                await Task.Delay(2000);
+                Nav.NavigateTo($"/posts/{PostId}");
             }
         }
-        catch (DataInsertionFailedException ex)
+        catch (OperationFailureException ex)
         {
             errorMessage = ex.Message;
         }
@@ -146,7 +194,6 @@ public partial class CreatePost : ComponentBase
             fileUploadErrorMessage = "The file you selected has a size that exceeded the max allowed size";
             return;
         }
-        isMakingRequest = true;
         fileUploadErrorMessage = string.Empty;
         string extension = Path.GetExtension(e.File.Name);
         // use of an allowed extension
@@ -159,15 +206,14 @@ public partial class CreatePost : ComponentBase
         {
             // convert IBrowseFile to an IFormFile 
             var imageFile = await ConvertToIFormFile(e.File);
-            string result = await FilesService.UploadFileAsync(imageFile);
+            var result = await FilesService.UploadFileAsync(imageFile);
             // set the cover image URL to the retrieved image URL from the api
-            post.CoverImageUrl = result;
+            updatedPost!.CoverImageUrl = result;
         }
         catch (FileUploadFailedException ex)
         {
             fileUploadErrorMessage = ex.Message;
         }
-        isMakingRequest = false;
     }
     private async Task<Microsoft.AspNetCore.Http.IFormFile> ConvertToIFormFile(IBrowserFile browserFile)
     {

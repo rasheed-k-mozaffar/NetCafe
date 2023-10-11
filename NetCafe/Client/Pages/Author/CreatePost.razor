@@ -19,14 +19,14 @@
                     @*TAGS SELECTION*@
                     <div>
                         <RadzenDropDown Placeholder="Select Relevant Tags " TValue="IEnumerable<Guid>" Data="tags"
-                                        TextProperty="Name" ValueProperty="TagId" Multiple="true" @bind-Value="selectedTags"
-                                        Change="TagsChanged" Chips="true"></RadzenDropDown>
+                            TextProperty="Name" ValueProperty="TagId" Multiple="true" @bind-Value="selectedTags"
+                            Change="TagsChanged" Chips="true"></RadzenDropDown>
                     </div>
                 </div>
                 @*SERIES SELECTION*@
                 <div>
                     <RadzenDropDown TValue="Guid?" Data="series" TextProperty="Name" ValueProperty="SeriesId"
-                                    @bind-Value="selectedSeries" />
+                        @bind-Value="selectedSeries" Placeholder="Select Series" AllowClear="true" />
                 </div>
                 @if (!string.IsNullOrEmpty(tagSelectionError))
                 {
@@ -49,8 +49,8 @@
                             </div>
                             <div>
                                 <button type="button"
-                                        class="px-4 py-2 ring-1 ring-blue-700 font-bold hover:bg-blue-800 rounded-md"
-                                        @onclick='(() => post.CoverImageUrl = null)'>
+                                    class="px-4 py-2 ring-1 ring-blue-700 font-bold hover:bg-blue-800 rounded-md"
+                                    @onclick='(() => post.CoverImageUrl = null)'>
                                     x
                                 </button>
                             </div>
@@ -90,6 +90,9 @@
                 <ValidationMessage For="(() => post.Content)" class="validation-msg" />
 
                 <button type="submit" class="submit-btn" disabled="@isMakingRequest">Publish</button>
+                <button type="button" @onclick="SaveDraftAsync"
+                    class="w-full rounded-lg bg-transparent text-sm py-3 ring-1 ring-gray-400 text-gray-700 dark:text-white hover:bg-gray-100"
+                    disabled="@isMakingRequest">Save Draft</button>
             </EditForm>
 
         </div>

@@ -182,10 +182,12 @@ public class PostsController : BaseController
             postToUpdate.ModifiedOn = DateTime.UtcNow;
             postToUpdate.SeriesId = model.SeriesId;
             postToUpdate.CoverImageUrl = model.CoverImageUrl;
+            postToUpdate.IsPublished = model.IsPublished;
 
             if (model.TagIds is not null && model.TagIds.Any())
             {
-                if(postToUpdate.Tags is not null && postToUpdate.Tags.Any()) {
+                if (postToUpdate.Tags is not null && postToUpdate.Tags.Any())
+                {
                     postToUpdate.Tags.Clear();
                 }
                 foreach (var tagId in model.TagIds)
