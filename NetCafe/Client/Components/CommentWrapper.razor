@@ -1,0 +1,25 @@
+﻿@inject ICommentsService CommentsService
+@inject NavigationManager Nav
+<div
+    class="w-full border-2 border-gray-300 dark:border-gray-600 p-6 rounded-lg shadow-md my-3 transition-all dark:bg-gray-800">
+    @*COMMENT HEADER*@
+    <div class="flex justify-start items-center mb-2 space-x-2">
+        <div class="bg-blue-700 rounded-full px-3 py-1 text-white font-bold">
+            @Comment.UserName[0].ToString().ToUpper()
+        </div>
+        <div>
+            <p class="font-semibold dark:text-white">@Comment.UserName</p>
+        </div>
+    </div>
+    <p class="text-gray-700 dark:text-gray-400 text-sm mb-3">@Comment.PostedOn.ToShortDateString()</p>
+
+    @*COMMENT BODY*@
+    <div>
+        <p class="text-gray-600 dark:text-gray-300 text-lg">@Comment.Content</p>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public CommentDto Comment { get; set; } = null!;
+}

@@ -1,0 +1,36 @@
+﻿@if (Show)
+{
+    <EditForm Model="CommentCreate" OnValidSubmit="SubmitClicked">
+    <DataAnnotationsValidator />
+    <div class="my-3">
+        <InputTextArea @bind-Value="@CommentCreate!.Content" rows="6" class="text-area-input"
+            Placeholder="Add your comment..." />
+        <ValidationMessage For="(() => CommentCreate.Content)" class="validation-msg" />
+    </div>
+
+    <div class="my-3 space-x-4">
+        <button type="submit" class="text-sm text-white px-4 py-3 bg-blue-700 rounded-lg focus:ring-2 ring-blue-400">
+            Submit</button>
+        <button type="button" @onclick="CancelClicked"
+            class="text-sm text-gray-700 bg-gray-200 px-4 py-3 rounded-lg focus:ring-2 ring-gray-400">
+            Cancel</button>
+    </div>
+</EditForm>
+}
+
+@code {
+    [Parameter] public CommentCreateDto? CommentCreate { get; set; }
+    [Parameter] public bool Show { get; set; }
+    [Parameter] public EventCallback OnSubmitClicked { get; set; }
+    [Parameter] public EventCallback OnCancelClicked { get; set; }
+
+    private void SubmitClicked()
+    {
+        OnSubmitClicked.InvokeAsync();
+    }
+
+    private void CancelClicked()
+    {
+        OnCancelClicked.InvokeAsync();
+    }
+}
