@@ -20,6 +20,7 @@ public class CommentsRepository : ICommentsRepository
         // Assign the foreign keys
         comment.PostId = postId;
         comment.AppUserId = identityOptions.UserId;
+        comment.UserName = identityOptions.UserName;
         var result = await context.Comments.AddAsync(comment);
 
         if (result.State == EntityState.Added)
@@ -33,33 +34,33 @@ public class CommentsRepository : ICommentsRepository
         }
     }
 
-    public async Task<bool> AddReplyToCommentAsync(Guid commentId, Comment reply)
-    {
-        var parentComment = await context.Comments.FindAsync(commentId);
+    // public async Task<bool> AddReplyToCommentAsync(Guid commentId, Comment reply)
+    // {
+    //     var parentComment = await context.Comments.FindAsync(commentId);
 
-        // In case the comment being replied to was missing
-        if (parentComment is null)
-        {
-            throw new NotFoundException(message: "No comment was found with the given ID.");
-        }
+    //     // In case the comment being replied to was missing
+    //     if (parentComment is null)
+    //     {
+    //         throw new NotFoundException(message: "No comment was found with the given ID.");
+    //     }
 
-        // map the relational properties
-        reply.PostId = parentComment.PostId;
-        reply.AppUserId = identityOptions.UserId;
-        reply.ParentCommentId = parentComment.Id;
+    //     // map the relational properties
+    //     reply.PostId = parentComment.PostId;
+    //     reply.AppUserId = identityOptions.UserId;
+    //     reply.ParentCommentId = parentComment.Id;
 
-        var result = await context.Comments.AddAsync(reply);
+    //     var result = await context.Comments.AddAsync(reply);
 
-        if (result.State == EntityState.Added)
-        {
-            await context.SaveChangesAsync();
-            return true;
-        }
-        else
-        {
-            throw new DataInsertionFailedException(message: "Something went wrong while attempting to add the comment.");
-        }
-    }
+    //     if (result.State == EntityState.Added)
+    //     {
+    //         await context.SaveChangesAsync();
+    //         return true;
+    //     }
+    //     else
+    //     {
+    //         throw new DataInsertionFailedException(message: "Something went wrong while attempting to add the comment.");
+    //     }
+    // }
 
     public async Task<bool> DeleteCommentAsync(Guid commentId)
     {
@@ -70,10 +71,10 @@ public class CommentsRepository : ICommentsRepository
             throw new NotFoundException(message: "No comment was found with the given ID.");
         }
         // remove the replies to the comment as well
-        if (comment.Replies is not null && comment.Replies.Any())
-        {
-            context.Comments.RemoveRange(comment.Replies);
-        }
+        // if (comment.Replies is not null && comment.Replies.Any())
+        // {
+        //     context.Comments.RemoveRange(comment.Replies);
+        // }
 
         var result = context.Comments.Remove(comment);
         if (result.State == EntityState.Deleted)
@@ -104,7 +105,7 @@ public class CommentsRepository : ICommentsRepository
     {
         // get the comments without tracking them by the context
         var comments = await context.Comments
-            .AsNoTracking().Where(c => c.PostId == postId).ToListAsync();
+            .Where(c => c.PostId == postId).ToListAsync();
 
         return comments;
     }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace NetCafe.Server.Controllers;
-[Authorize(Roles = "USER,AUTHOR")]
 public class CommentsController : BaseController
 {
     private readonly ICommentsRepository commentsRepository;
@@ -77,6 +76,7 @@ public class CommentsController : BaseController
     #endregion
     #region POST
     [HttpPost("{postId}")]
+    [Authorize(Roles = "USER,AUTHOR")]
     public async Task<IActionResult> AddCommentOnPost(Guid postId, [FromBody] CommentCreateDto model)
     {
         if (ModelState.IsValid)
@@ -109,52 +109,53 @@ public class CommentsController : BaseController
         }
     }
 
-    [HttpPost("reply/{commentId}")]
-    public async Task<IActionResult> ReplyToComment(Guid commentId, [FromBody] CommentCreateDto reply)
-    {
-        if (ModelState.IsValid)
-        {
-            try
-            {
-                var replyToAdd = reply.ToCommentAdd();
-                try
-                {
-                    var creationResult = await commentsRepository
-                    .AddReplyToCommentAsync(commentId, replyToAdd);
+    // [HttpPost("reply/{commentId}")]
+    // public async Task<IActionResult> ReplyToComment(Guid commentId, [FromBody] CommentCreateDto reply)
+    // {
+    //     if (ModelState.IsValid)
+    //     {
+    //         try
+    //         {
+    //             var replyToAdd = reply.ToCommentAdd();
+    //             try
+    //             {
+    //                 var creationResult = await commentsRepository
+    //                 .AddReplyToCommentAsync(commentId, replyToAdd);
 
-                    logger.LogInformation("A new reply for comment with the ID: {id} was added successfully", commentId);
-                    return Ok(new ApiResponse
-                    {
-                        Message = "Your reply has been added successfully",
-                        IsSuccess = true
-                    });
-                }
-                catch (NotFoundException ex)
-                {
-                    return BadRequest(new ApiErrorResponse
-                    {
-                        Message = ex.Message
-                    });
-                }
-            }
-            catch (DataInsertionFailedException ex)
-            {
-                logger.LogError("Failed to add new reply to comment with the ID: {id}", commentId);
-                return BadRequest(new ApiErrorResponse
-                {
-                    Message = ex.Message
-                });
-            }
-        }
-        else
-        {
-            logger.LogError("Invalid reply comment data format");
-            return BadRequest(ModelState);
-        }
-    }
+    //                 logger.LogInformation("A new reply for comment with the ID: {id} was added successfully", commentId);
+    //                 return Ok(new ApiResponse
+    //                 {
+    //                     Message = "Your reply has been added successfully",
+    //                     IsSuccess = true
+    //                 });
+    //             }
+    //             catch (NotFoundException ex)
+    //             {
+    //                 return BadRequest(new ApiErrorResponse
+    //                 {
+    //                     Message = ex.Message
+    //                 });
+    //             }
+    //         }
+    //         catch (DataInsertionFailedException ex)
+    //         {
+    //             logger.LogError("Failed to add new reply to comment with the ID: {id}", commentId);
+    //             return BadRequest(new ApiErrorResponse
+    //             {
+    //                 Message = ex.Message
+    //             });
+    //         }
+    //     }
+    //     else
+    //     {
+    //         logger.LogError("Invalid reply comment data format");
+    //         return BadRequest(ModelState);
+    //     }
+    // }
     #endregion
     #region DELETE
     [HttpDelete("{id}")]
+    [Authorize(Roles = "USER,AUTHOR")]
     public async Task<IActionResult> DeleteComment(Guid id)
     {
         try
@@ -193,6 +194,7 @@ public class CommentsController : BaseController
     #endregion
     #region PUT
     [HttpPut("{id}")]
+    [Authorize(Roles = "USER,AUTHOR")]
     public async Task<IActionResult> UpdateComment(Guid id, [FromBody] CommentUpdateDto model)
     {
         if (ModelState.IsValid)

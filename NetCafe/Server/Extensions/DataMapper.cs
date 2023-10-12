@@ -80,11 +80,12 @@ public static class DataMapper
         {
             CommentId = comment.Id,
             PostId = comment.PostId,
-            ParentCommentId = comment.ParentCommentId,
+            // ParentCommentId = comment.ParentCommentId,
             AppUserId = comment.AppUserId,
+            UserName = comment.UserName,
             Content = comment.Content,
             PostedOn = comment.PostedOn,
-            Replies = comment.Replies?.Select(r => r.ToCommentDto()).ToList(),
+            // Replies = comment.Replies?.Select(r => r.ToCommentDto()).ToList(),
             Likes = comment.Likes
         };
     }

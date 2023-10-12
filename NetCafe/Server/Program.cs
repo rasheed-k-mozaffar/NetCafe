@@ -95,6 +95,7 @@ builder.Services.AddScoped(sp =>
         if (httpContext is not null && httpContext.User.Identity!.IsAuthenticated)
         {
             options.UserId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            options.UserName = httpContext.User.FindFirst(ClaimTypes.Name)!.Value;
         }
     }
     return options;

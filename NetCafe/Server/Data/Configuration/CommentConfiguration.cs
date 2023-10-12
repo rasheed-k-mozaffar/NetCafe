@@ -12,9 +12,9 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
                .IsRequired()
                .HasMaxLength(1000);
 
-        builder.HasOne(p => p.ParentComment)
-               .WithMany(p => p.Replies)
-               .HasForeignKey(p => p.ParentCommentId)
-               .OnDelete(DeleteBehavior.NoAction); // delete replies when comment is deleted
+        // builder.HasOne(p => p.ParentComment)
+        //        .WithMany(p => p.Replies)
+        //        .HasForeignKey(p => p.ParentCommentId)
+        //        .OnDelete(DeleteBehavior.NoAction); // delete replies when comment is deleted
     }
 }

@@ -6,6 +6,6 @@ public interface ICommentsRepository
     Task<Comment> GetCommentAsync(Guid commentId);
     Task<bool> AddCommentAsync(Guid postId, Comment comment);
     Task<bool> DeleteCommentAsync(Guid commentId);
-    Task<bool> AddReplyToCommentAsync(Guid commentId, Comment reply);
+    // Task<bool> AddReplyToCommentAsync(Guid commentId, Comment reply);
     Task<bool> UpdateCommentAsync(Guid commentId, Comment comment);
 }
