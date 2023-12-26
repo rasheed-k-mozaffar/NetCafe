@@ -6,6 +6,8 @@ public partial class Register : ComponentBase
 {
     [Inject]
     public IAuthService AuthService { get; set; } = default!;
+    [Inject]
+    public NavigationManager Nav { get; set; } = default!;
 
     private RegisterRequest model = new();
     private bool isMakingRequest = false;
@@ -18,6 +20,7 @@ public partial class Register : ComponentBase
         try
         {
             await AuthService.RegisterUserAsync(model);
+            Nav.NavigateTo("/user/sign-in");
         }
         catch (AuthenticationFailedException ex)
         {
