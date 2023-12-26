@@ -15,7 +15,7 @@ public class PostConfiguration : IEntityTypeConfiguration<Post>
 
         builder.Property(p => p.Content)
             .IsRequired()
-            .HasMaxLength(40_000);
+            .HasMaxLength(2_500_000);
 
         builder.HasMany(p => p.Comments)
                 .WithOne(p => p.Post)
