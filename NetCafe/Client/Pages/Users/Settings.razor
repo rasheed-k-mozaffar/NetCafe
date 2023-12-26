@@ -1,0 +1,53 @@
+﻿@page "/user/settings"
+@layout MainLayout
+@attribute [Authorize(Roles = "USER,AUTHOR")]
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager Nav
+<PageTitle>Settings</PageTitle>
+<section class="section-container">
+    <div class="container-middle-section">
+        <h1>Your Details</h1>
+        <AuthorizeView>
+            <Authorized>
+                <ul>
+                    <li><span class="font-bold">Email:</span> @context.User.FindFirst(ClaimTypes.Email).Value</li>
+                    <li><span class="font-bold">Username:</span> @context.User.FindFirst(ClaimTypes.Name).Value</li>
+                </ul>
+
+                <button @onclick="SignOutClicked"
+                    class="px-4 py-3 bg-red-600 text-white hover:bg-red-700 rounded-lg">Sign out</button>
+            </Authorized>
+        </AuthorizeView>
+    </div>
+</section>
+
+@if (showSignOutDialog)
+{
+    <SignOutDialog OnConfirmClicked="SignOutAsync" OnCancelClicked="CloseDialog" />
+}
+
+@code {
+    private bool showSignOutDialog = false;
+
+    private void SignOutClicked()
+    {
+        showSignOutDialog = true;
+    }
+
+    private void CloseDialog()
+    {
+        showSignOutDialog = false;
+    }
+
+    private async Task SignOutAsync()
+    {
+        if (await LocalStorage.ContainKeyAsync("access_token"))
+        {
+            // remove the token from the local storage
+            await LocalStorage.RemoveItemAsync("access_token");
+            AuthenticationStateProvider.GetAuthenticationStateAsync();
+            Nav.NavigateTo("/", forceLoad: true);
+        }
+    }
+}
