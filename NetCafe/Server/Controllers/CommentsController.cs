@@ -84,12 +84,13 @@ public class CommentsController : BaseController
             try
             {
                 var commentToAdd = model.ToCommentAdd();
-                var creationResult = await commentsRepository.AddCommentAsync(postId, commentToAdd);
-
+                var addedComment = await commentsRepository.AddCommentAsync(postId, commentToAdd);
+                var commentAsDto = addedComment.ToCommentDto();
                 logger.LogInformation("New comment was added to post with ID: {postId}", postId);
-                return Ok(new ApiResponse
+                return Ok(new ApiResponse<CommentDto>
                 {
                     Message = "New comment added successfully",
+                    Value = commentAsDto,
                     IsSuccess = true
                 });
             }
