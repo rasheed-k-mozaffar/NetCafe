@@ -1,0 +1,64 @@
+﻿@inject NavigationManager Nav
+
+<div class="border border-gray-200 rounded-md min-w-[42rem] p-3 my-2">
+    <div class="px-3 py-3">
+        <p class="text-lg font-medium text-gray-500 dark:text-gray-300">@($"{Series.Posts.Count} Part(s) Series")</p>
+    </div>
+    @if (Series.Posts is not null)
+    {
+        @* int counter = 1; *@
+        @foreach (var (p, index) in posts.Select((p, index) => (p, index)))
+        {
+            <div @onclick='(() => Nav.NavigateTo($"/posts/{p.PostId}", forceLoad: true))'
+                class="rounded-md px-3 py-3 hover:bg-blue-100 cursor-pointer">
+                <p
+                    class="text-gray-600 @(p.PostId == SelectedPostId ? "font-bold" : "font-light") dark:text-gray-300 rounded-md">
+                    <span
+                        class="px-3.5 py-2  font-normal rounded-full dark:text-black @(p.PostId == SelectedPostId ? "bg-blue-600 text-white" : "bg-gray-100")">@(index
+                + 1)</span>
+                    &nbsp; @p.Title
+                </p>
+            </div>
+        }
+        @if (showAll == false)
+        {
+            <div @onclick="ToggleMenu" class="rounded-md px-3 py-2 hover:bg-gray-100 text-center cursor-pointer">
+                <p class="text-gray-500">View All Parts</p>
+            </div>
+        }
+        else
+        {
+            <div @onclick="CollapseMenu"
+                class="rounded-md px-3 py-2 hover:bg-gray-100 text-center cursor-pointer  border-gray-400">
+                <p class="text-gray-500">Collapse</p>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public SeriesDto? Series { get; set; }
+    [Parameter] public Guid SelectedPostId { get; set; }
+    private List<PostSummaryDto>? posts;
+    private bool showAll = false;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        posts = Series.Posts.OrderBy(p => p.PublishedOn).Take(3).ToList();
+    }
+
+    private void ToggleMenu()
+    {
+        showAll = true;
+        posts = Series.Posts.OrderBy(p => p.PublishedOn).ToList();
+        StateHasChanged();
+    }
+
+    private void CollapseMenu()
+    {
+        showAll = false;
+        posts = Series.Posts.OrderBy(p => p.PublishedOn).Take(3).ToList();
+        StateHasChanged();
+    }
+}

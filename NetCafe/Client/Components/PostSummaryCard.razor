@@ -1,0 +1,50 @@
+﻿@inject NavigationManager Nav
+
+<div
+    class="min-w-[25rem] max-w-[26rem]  flex flex-col justify-between bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <a href="/posts/@Post.PostId">
+        <img class="rounded-t-lg max-h-[300px] object-cover" src="@Post.CoverImageUrl" alt="@Post.Title" />
+    </a>
+    <div class="p-5">
+        <a href="/posts/@Post.PostId">
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white hover:text-blue-800">
+                @Post.Title</h5>
+        </a>
+        <p class="text-gray-500 font-light dark:text-gray-300">@Post.PublishedOn.ToShortDateString()</p>
+
+        @if (Post.Tags is not null && Post.Tags.Any())
+        {
+            <div class="my-3 flex space-x-4">
+                @foreach (var t in Post.Tags)
+                {
+                    <div @onclick='(() => Nav.NavigateTo($"/tags/{t.TagId}"))'
+                        class="px-4 py-2 w-fit cursor-pointer rounded-xl border-[1px] border-gray-400 p-1 hover:bg-gray-50 dark:hover:bg-slate-500">
+                        <p class="text-center text-black dark:text-white">@t.Name</p>
+                    </div>
+                }
+            </div>
+
+        }
+
+        <button @onclick='(() => Nav.NavigateTo($"/posts/{Post.PostId}"))'
+            class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            Explore
+            <svg class="w-3.5 h-3.5 ml-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M1 5h12m0 0L9 1m4 4L9 9" />
+            </svg>
+        </button>
+    </div>
+</div>
+
+
+
+@code {
+    [Parameter] public PostSummaryDto Post { get; set; } = null!;
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+}
