@@ -72,9 +72,82 @@
                 }
             </div>
 
+            @if (series is not null)
+            {
+                <div class="flex justify-center items-center">
+                    <SeriesPostsHighlighter Series="series" SelectedPostId="PostId" />
+                </div>
+            }
+
             <div class="my-5 leading-8 text-gray-900/80 dark:text-gray-300 text-lg">
             @((MarkupString)postContent!)
         </div>
+            <hr />
+            @* COMMENTS SECTION *@
+            <div class="mt-8">
+            @if (isLoadingComments)
+                {
+                    <TextSkeleton />
+                }
+                else
+                {
+                    <h1 class="font-bold dark:text-white">All Comments (@($"{comments?.Count ?? 0}"))</h1>
+                    <div class="my-5 p-8">
+                        <AuthorizeView>
+                            <Authorized>
+                                <button class="submit-btn" disabled="@isMakingRequest"
+                                    @onclick='(() => ShowAddCommentForm())'>Add
+                                    Comment</button>
+
+                                <CommentForm CommentCreate="commentCreate" Show="wantsToAddComment"
+                                    OnSubmitClicked="AddCommentAsync" OnCancelClicked="CancelComment" />
+                            </Authorized>
+                            <NotAuthorized>
+                                <p>If you want to comment on the post, please sign in first!</p>
+                                <button class="submit-btn" @onclick='(() => Nav.NavigateTo("/user/sign-in"))'>Go to Sign
+                                    in</button>
+                            </NotAuthorized>
+                        </AuthorizeView>
+
+                        @if (comments is not null && comments.Any())
+                        {
+                            @foreach (var c in comments)
+                            {
+                                <CommentWrapper Comment="c" OnDeleteClicked='(() => OpenDeleteCommentDialog(c.CommentId))'
+                                    OnEditClicked='(() => ShowEditCommentDialog(c.CommentId, c.Content))' />
+                            }
+                        }
+                    </div>
+                }
+            </div>
         }
     </div>
 </section>
+
+@if (wantsToDeleteComment)
+{
+    <ConfirmDeleteDialog Title="Delete Comment" Text="are you sure you to delete this comment?"
+    ResourceId="commentToDeleteId" OnCancelClicked="CloseCommentDeleteDialog" OnConfirmClicked="DeleteCommentAsync" />
+}
+
+@if (wantsToUpdateComment)
+{
+    <ActionDialog Title="Edit Comment" ResourceId="commentToUpdateId" OnCancelClicked="CloseActionDialog">
+    <Content>
+        <EditForm Model="updatedComment" OnValidSubmit="UpdateCommentAsync">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <InputTextArea rows="6" class="text-area-input appearance-none" @bind-Value="@updatedComment.Content"
+                    placeholder="Tag description" />
+                <ValidationMessage For="(() => updatedComment.Content)" class="validation-msg" />
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="submit-btn" disabled="@isMakingUpdateRequest">Submit</button>
+            </div>
+        </EditForm>
+
+    </Content>
+</ActionDialog>
+}
