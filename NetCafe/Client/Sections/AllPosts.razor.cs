@@ -9,9 +9,12 @@ public partial class AllPosts : ComponentBase
     [Inject]
     public IPostsService PostsService { get; set; } = default!;
 
+    // these two parameters are concered with search and filtering
+    private string? searchText;
 
     private ApiResponse<IEnumerable<PostSummaryDto>>? requestResult;
     private List<PostSummaryDto>? posts;
+    private List<PostSummaryDto>? filteredPosts;
     private bool isLoadingPosts = true;
     private string errorMessage = string.Empty;
 
@@ -36,5 +39,11 @@ public partial class AllPosts : ComponentBase
             errorMessage = ex.Message;
         }
         isLoadingPosts = false;
+    }
+
+    private void FilterPosts(ChangeEventArgs e)
+    {
+        searchText = e.Value!.ToString();
+        filteredPosts = posts!.Where(p => p.Title!.ToLower().Contains(searchText.ToLower())).ToList();
     }
 }

@@ -1,4 +1,4 @@
-<section class="p-5 rounded-lg">
+<section class="p-5 rounded-lg max-w-full px-10">
     @if (isLoadingPosts)
     {
         <div class="h-[25vh] flex items-center justify-center">
@@ -7,17 +7,60 @@
     }
     else
     {
-        <h1 class="text-5xl font-extrabold text-center blue-gradient">All Posts</h1>
         @if (!string.IsNullOrEmpty(errorMessage))
         {
             <NoResults />
         }
-        <main class="flex flex-wrap 2xl:justify-start xl:justify-start lg:justify-start md:justify-start sm:justify-center px-4">
+
+        <div class="w-full flex justify-between items-center 2xl:flex-row xl:flex-row lg:flex-row md:flex-row sm:flex-col space-y-2">
+            <div class="flex-1">
+                <h1 class="text-5xl font-extrabold blue-gradient">All Posts</h1>
+            </div>
+
+            <div class="flex-1">
+                <label for="default-search"
+                    class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                        </svg>
+                    </div>
+                    <input id="default-search" @bind-value="searchText" @oninput="@FilterPosts"
+                        class="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Search posts by title..." required>
+                </div>
+            </div>
+        </div>
+
+        <main
+        class="my-5 max-w-full mx-auto flex 2xl:justify-start xl:justify-start lg:justify-start md:justify-start sm:justify-center flex-wrap gap-4">
         @if (posts is not null && posts.Any())
             {
-                @foreach (var p in posts)
+                @if (string.IsNullOrEmpty(searchText))
                 {
-                    <PostSummaryCard Post="p" />
+                    @foreach (var p in posts)
+                    {
+                        <PostSummaryCard Post="p" />
+                    }
+                }
+                else
+                {
+                    if(filteredPosts is not null && filteredPosts.Any())
+                    {
+                        @foreach (var p in filteredPosts)
+                        {
+                            <PostSummaryCard Post="p" />
+                        }
+                    }
+                    else
+                    {
+                        <div class="w-full flex justify-center items-center">
+                            <NoResults />
+                        </div>
+                    }
                 }
             }
         </main>
