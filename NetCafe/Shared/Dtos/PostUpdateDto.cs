@@ -12,7 +12,7 @@ public class PostUpdateDto
     public string? Title { get; set; }
 
     [Required(ErrorMessage = "The post's content is required")]
-    [MaxLength(150, ErrorMessage = "The content of the post should not exceed 15,000 characters")]
+    [MaxLength(2_500_000, ErrorMessage = "The content of the post should not exceed 2,500,000 characters")]
     public string? Content { get; set; }
     public Guid? SeriesId { get; set; }
     public bool IsPublished { get; set; }

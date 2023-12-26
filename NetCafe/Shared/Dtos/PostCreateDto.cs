@@ -11,7 +11,7 @@ public class PostCreateDto
     public string? Title { get; set; }
 
     [Required(ErrorMessage = "The post's content is required")]
-    [MaxLength(1_500_000, ErrorMessage = "The content of the post should not exceed 1,500,000 characters")]
+    [MaxLength(2_500_000, ErrorMessage = "The content of the post should not exceed 2,500,000 characters")]
     public string? Content { get; set; }
     public string? CoverImageUrl { get; set; }
     public bool IsPublished { get; set; }
