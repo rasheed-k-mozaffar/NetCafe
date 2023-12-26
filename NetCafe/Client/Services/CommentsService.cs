@@ -12,7 +12,7 @@ public class CommentsService : ICommentsService
         this.httpClient = httpClient;
     }
 
-    public async Task<ApiResponse> AddCommentAsync(Guid postId, CommentCreateDto comment)
+    public async Task<ApiResponse<CommentDto>> AddCommentAsync(Guid postId, CommentCreateDto comment)
     {
         var response = await httpClient.PostAsJsonAsync($"/api/comments/{postId}", comment);
 
@@ -22,23 +22,23 @@ public class CommentsService : ICommentsService
             throw new DataInsertionFailedException(message: error!.Message!);
         }
 
-        var result = await response.Content.ReadFromJsonAsync<ApiResponse>();
+        var result = await response.Content.ReadFromJsonAsync<ApiResponse<CommentDto>>();
         return result!;
     }
 
-    public async Task<ApiResponse> AddReplyToCommentAsync(Guid commentId, CommentCreateDto reply)
-    {
-        var response = await httpClient.PostAsJsonAsync($"/api/comments/reply/{commentId}", reply);
+    // public async Task<ApiResponse> AddReplyToCommentAsync(Guid commentId, CommentCreateDto reply)
+    // {
+    //     var response = await httpClient.PostAsJsonAsync($"/api/comments/reply/{commentId}", reply);
 
-        if (!response.IsSuccessStatusCode)
-        {
-            var error = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
-            throw new DataInsertionFailedException(message: error!.Message!);
-        }
+    //     if (!response.IsSuccessStatusCode)
+    //     {
+    //         var error = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
+    //         throw new DataInsertionFailedException(message: error!.Message!);
+    //     }
 
-        var result = await response.Content.ReadFromJsonAsync<ApiResponse>();
-        return result!;
-    }
+    //     var result = await response.Content.ReadFromJsonAsync<ApiResponse>();
+    //     return result!;
+    // }
 
     public async Task<ApiResponse> DeleteCommentAsync(Guid commentId)
     {
