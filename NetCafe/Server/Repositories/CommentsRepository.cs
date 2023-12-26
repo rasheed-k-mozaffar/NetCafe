@@ -1,5 +1,4 @@
-﻿
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace NetCafe.Server.Repositories;
@@ -15,7 +14,7 @@ public class CommentsRepository : ICommentsRepository
         this.identityOptions = identityOptions;
     }
 
-    public async Task<bool> AddCommentAsync(Guid postId, Comment comment)
+    public async Task<Comment> AddCommentAsync(Guid postId, Comment comment)
     {
         // Assign the foreign keys
         comment.PostId = postId;
@@ -26,7 +25,8 @@ public class CommentsRepository : ICommentsRepository
         if (result.State == EntityState.Added)
         {
             await context.SaveChangesAsync();
-            return true;
+            context.Entry(comment).GetDatabaseValues();
+            return comment;
         }
         else
         {
